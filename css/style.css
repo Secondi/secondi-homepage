@@ -1,0 +1,47 @@
+@charset "utf-8";
+*{padding:0;margin:0}
+html{background: url(../img/bck.png); }
+body{font-family:Georgia, "Times New Roman", Times, serif;}
+header{}
+ul li{margin-left:25px}
+header h1{text-shadow:#FFF 2px 2px;}
+.width{width:990px; margin:0 auto 0 auto;}
+.clear{clear:both}
+.transparent{background:url(../img/background.jpg);opacity:0.5;position:absolute;z-index:-1;width:990px; height:200px;filter:alpha(opacity=50);-moz-opacity:0.5;z-index:-1;}
+.highlight {border:2px solid #9F1319;background:#FFF url(../img/iconCaution.gif) no-repeat center}
+#logo{float:left;position:relative}
+#overlay{position:absolute;height:200px;width:585px;z-index:1;display:none}
+#overlay #transparent{position:absolute;height:200px;width:585px;opacity:0.7;background:#0CF;z-index:-1;}
+#overlay #message{margin-top:60px;text-align:center}
+#fanlist{height:200px;width:585px; float:right;position:relative;background:url(../img/background.jpg);}
+#fanlist form{float:right;padding:10px}
+#fanlist form p{position:relative; margin:8px 5px 8px 5px;}
+#fanlist form p br{display:none}
+#fanlist form label{position:absolute; top:0; left:0; margin:5px 5px 5px 10px; font-size:13px;display:block; width:300px; color:#63C}
+#fanlist form input{font-size:18px; width:400px}
+#fanlist form #formcontent{float:left}
+#fanlist form button{height:131px;width:131px;border:1px solid #63C;font-size:30px;font-family:Georgia, "Times New Roman", Times, serif;float:left;margin:10px;background-color:#333;color:#FFF;text-shadow:#000 2px 2px;}
+#fanlist form button:hover{color:#000;text-shadow:#FFF 2px 2px;background-color:#63C;border-color:#333;}
+#resubmit{color:#309;text-decoration:underline}
+/*Cool Menu*/
+.panel_button {text-align:center;margin-left:170px;position: relative;width: 173px;height: 54px;background: #FFF;z-index: 20;-moz-border-radius-bottomleft:20px 20px;-moz-border-radius-bottomright:20px 20px;border-bottom-left-radius:20px 20px;border-bottom-right-radius:20px 20px;-webkit-border-bottom-left-radius:20px 20px;-webkit-border-bottom-right-radius:20px 20px;filter:alpha(opacity=80);-moz-opacity:0.80;-khtml-opacity: 0.80;opacity: 0.80;cursor: pointer;}  
+.panel_button a {text-decoration: none;color: #0CF;font-size: 20px;font-weight: bold;position: relative;font-family: Arial, Helvetica, sans-serif;top:15px}
+.panel_button a:hover {color: #999999}
+.border {border: 15px #63C solid;padding:5px}
+#wrapper{margin:0 auto 0 auto;width:900px}
+#panel_top{position:absolute;width: 900px;z-index: 25;}
+#panel{width: 900px; position: relative;top: 1px;height:0;margin: 0 auto 0 auto;z-index: 10;overflow: hidden;}
+#panel_contents {background: black;filter:alpha(opacity=70);-moz-opacity:0.70;-khtml-opacity: 0.70;opacity: 0.70;height: 100%;width: 904px;position: absolute;z-index: -1;}  
+#panel #social,#panel #blog,#panel #contact{background:#FFF; float:left;font-size:12px}
+#panel #social{width:300px;margin-left:70px; margin-top:50px;}
+#panel #social ul li{font-size:18px}
+#panel a:link{color:#63C}
+#panel a:visited{color:#63C}
+#panel a:hover{color:#0CF}
+#feed{overflow:hidden;max-height:286px}
+#feed h2 a{font-size:12px}
+#panel #blog{width:330px;margin-left:50px;margin-top:50px;}
+#panel #contact{float:left;margin-left:70px;margin-top:20px}
+#hidebtn{display:none}
+#album{overflow:hidden;}
+#album iframe{width:100%; height:840px; border:none}
