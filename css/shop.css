@@ -1,0 +1,5 @@
+/* CSS Document */
+#main{float:left}
+#cafepressFooter{float:left;margin-top:50px;display:none}
+#cafepressFooter p{width:300px}
+div.container,div#productInfo{width:400px}
