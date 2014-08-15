@@ -1,0 +1,25 @@
+pom.xml
+*jar
+lib/
+classes/
+out/
+target/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
+
+# Light Table
+.nrepl-port
+
+# project generated
+.sass-cache/
+composer_sam.js
+assets/css
+assets/js
+
+# Django / PyCharm
+.idea
+*.pyc
+
+# Bower
+bower_components

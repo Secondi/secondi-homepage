@@ -1,0 +1,21 @@
+{
+  "name": "secondi-homepage",
+  "version": "0.1.0",
+  "homepage": "secondi.co.nz",
+  "authors": [
+    "Brendon John Muschamp <brendon@numerical.co.nz>"
+  ],
+  "description": "homepage for secondi",
+  "license": "None",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "~0.11.1"
+  }
+}
