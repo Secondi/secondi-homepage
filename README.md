@@ -1,11 +1,29 @@
-Secondi-website
-===============
+# secondi-homepage #
 
-This is the repository that I'm using to store the website for my band Secondi. The website will always be relatively simple, feel free to submit a pull request.
+Hello there, this is the source repo for Secondi's homepage. This website is being openly developed as we are building something we like and want to share it.
+
+Some major rework has been done as we're working on our project "The rainbow series." See our [Kickstarter](https://www.kickstarter.com/projects/brendonjohn/secondi-rainbow-series/) for a better idea
+
+Want to contribute? Right at the moment we're doing the initial feature development ourselves, raise a github issue or pull request and we'
 
 
+## Tools ##
 
-More about Secondi
-===========
+- clojurescript
+- om
+- react
+- sass, bourbon, bitters
+
+
+## Oh yeah? I want more! ##
+
 - http://secondi.co.nz
-- http://facebook.com/secondination
+- https://facebook.com/secondination
+- https://twitter.com/secondination
+
+
+## Developers ##
+This is a [Numerical Brass](http://numerical.co.nz) project. In short, we're a young software duo that's taken the way of functional programming.
+
+- Luke Cossey [@lukeecossey](https://twitter.com/lukeecossey)
+- Brendon Muschamp [@m0land](https://twitter.com/m0land)
