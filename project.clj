@@ -1,4 +1,4 @@
-(defproject secondi-homepage "0.1.0-SNAPSHOT"
+(defproject secondi "0.1.0-SNAPSHOT"
   :description "Homepage for Secondi"
   :url "http://secondi.co.nz"
 
@@ -18,7 +18,7 @@
 
   :cljsbuild {:builds {:dev {:id "secondi-dev"
                              :source-paths ["src"]
-                             :compiler {:output-to "assets/js/secondi-homepage.js"
+                             :compiler {:output-to "assets/js/secondi.js"
                                         :output-dir "assets/js/out"
                                         :optimizations :none
                                         :source-map true}}
