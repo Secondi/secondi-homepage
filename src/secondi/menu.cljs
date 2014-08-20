@@ -8,8 +8,8 @@
 (defn menu-item-view [item owner]
   (om/component
    (dom/li nil
-           (dom/a #js {:href (:slug item)}
-                  (str (get-in item [:page :name]))
+           (dom/a #js {:className "link" :href (:slug item)}
+                  (get-in item [:page :name])
                   (menu-square)))))
 
 (defn menu-view [app owner]
