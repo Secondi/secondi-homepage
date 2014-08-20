@@ -1,0 +1,20 @@
+@import 'utils'
+
+@mixin menu-base($large-screen, $medium-screen, $large-width, $medium-width)
+  div.menuWrapper
+    width: 100%
+
+    ul.menu
+      @include outer-container
+
+      > li
+        @include fill-parent()
+        @include span-columns(1 of 6)
+        a
+          display: block
+          float: left
+
+
+    @include media(min-width $medium-screen)
+      ul.menu
+        width: $large-width

@@ -5,9 +5,9 @@
             [clojure.string :as string]))
 
 (defn slug [{:keys [name]}]
-        (-> name
-            (string/lower-case)
-            (string/replace " " "-")))
+  (-> name
+      (string/lower-case)
+      (string/replace " " "-")))
 
 (defn menu-item-view [item owner]
   (om/component
@@ -24,5 +24,6 @@
                 (js/console.log (om/get-state owner :hello)))
     om/IRenderState
     (render-state [this state]
-                  (apply dom/ul #js {:className "menu"}
-                         (om/build-all menu-item-view (:areas app))))))
+                  (dom/div #js {:className "menuWrapper"}
+                           (apply dom/ul #js {:className "menu"}
+                                  (om/build-all menu-item-view (:areas app)))))))

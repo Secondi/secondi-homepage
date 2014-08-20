@@ -2,8 +2,16 @@
 @import '../base/base'
 @import '../neat/neat'
 
+$large-screen: em(1080)
+$medium-screen: em(940)
+$large-width: em(800)
+$medium-width: em(640)
+
 body
   margin: 0
 
 @import 'pages'
 @include general-page()
+
+@import 'menu'
+@include menu-base($large-screen, $medium-screen, $large-width, $medium-width)
