@@ -3,11 +3,10 @@
   :url "http://secondi.co.nz"
 
   :dependencies [[org.clojure/clojure "1.6.0"]
-                 [org.clojure/clojurescript "0.0-2234"]
-                 [org.clojure/core.async "0.1.303.0-886421-alpha"]
-                 [om "0.7.0"]
-                 [secretary "1.2.0"]
-                 [cljs-ajax "0.2.6"]]
+                 [org.clojure/clojurescript "0.0-2277"]
+                 [org.clojure/core.async "0.1.319.0-6b1aca-alpha"]
+                 [om "0.7.1"]
+                 [secretary "1.2.0"]]
 
 
   :plugins [[lein-cljsbuild "1.0.3"]]
