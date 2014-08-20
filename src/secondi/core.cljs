@@ -13,7 +13,10 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (enable-console-print!)
-(println "hello Secondi")
+
+
+;; application state
+;; ----------------------------------------------------------------------------
 
 (defonce app-state (atom {:view :home
                           :areas [(page/navigate-page "Video" "A whole lot of video")
@@ -22,6 +25,10 @@
                                   (page/navigate-page "Sign Up" "you should sign up to the mailing list")
                                   (page/navigate-page "Blog" "blog with me")
                                   (page/navigate-page "Music" "I like music, we like music, you like too?")]}))
+
+
+;; root om component
+;; ----------------------------------------------------------------------------
 
 (defn secondi-app [app owner]
   (let [view (:view app)
@@ -42,7 +49,9 @@
 (om/root secondi-app app-state
          {:target (. js/document (getElementById "page"))})
 
-;; ROUTING
+
+;; routing
+;; ----------------------------------------------------------------------------
 
 (defroute "/" []
   (swap! app-state assoc :view :home)

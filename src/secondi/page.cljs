@@ -3,6 +3,8 @@
             [om.dom :as dom :include-macros true]
             [clojure.string :as string]))
 
+;; protocol
+;; ----------------------------------------------------------------------------
 (defprotocol IPageNavigation
   (navigate-to [this])
   (transition-to [this])
@@ -14,8 +16,14 @@
 
 (defprotocol IGenericPage)
 
+;; records
+;; ----------------------------------------------------------------------------
+
 (defrecord GenericPage [name body-description])
 (defrecord NavigatePage [page slug])
+
+;; primitive extension of page
+;; ----------------------------------------------------------------------------
 
 (defn generic-page [name body-description]
   (->GenericPage name body-description))
@@ -30,13 +38,6 @@
 
 ;; om component
 ;; ----------------------------------------------------------------------------
-
-(defn section-header [name]
-  (dom/h2 nil name))
-
-(defn section-banner [page]
-  (dom/div #js {:className "panel"}
-           (section-header (get-in page [:page :name]))))
 
 (defn page-view [page owner]
   (reify

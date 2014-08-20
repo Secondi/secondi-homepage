@@ -2,6 +2,10 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]))
 
+
+;; om component
+;; ----------------------------------------------------------------------------
+
 (defn menu-square []
   (dom/div #js {:className "nav-square"} nil))
 
