@@ -12,7 +12,7 @@
 (defn menu-item-view [item owner]
   (om/component
    (dom/li nil
-           (dom/a #js {:href (slug item)} (:name item)))))
+           (dom/a #js {:className "link" :href (slug item)} (:name item)))))
 
 (defn menu-view [app owner]
   (reify
