@@ -36,6 +36,6 @@
                 (js/console.log (om/get-state owner :hello)))
     om/IRenderState
     (render-state [this state]
-                  (dom/div #js {:className "sectionWrapper"}
+                  (dom/div #js {:className "sectionWrapper general-page"}
                            (section-banner page)
                            (dom/div #js {:className "content"} (:body-description page))))))
