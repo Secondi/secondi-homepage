@@ -10,8 +10,9 @@
             (string/replace " " "-")))
 
 (defn menu-item-view [item owner]
-  (dom/li nil
-          (dom/a #js {:href (slug item)} (:name item))))
+  (om/component
+   (dom/li nil
+           (dom/a #js {:href (slug item)} (:name item)))))
 
 (defn menu-view [app owner]
   (reify
