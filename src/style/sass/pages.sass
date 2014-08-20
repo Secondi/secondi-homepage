@@ -1,10 +1,19 @@
+@import "utils"
 
 @mixin general-page()
   div.sectionWrapper
     width: 100%
-    background-color: grey
-    height: 300px
+    @include padding(140px 0 140px 0)
+
+    &:nth-child(2n)
+      background-color: #CCC
+
+    &:nth-child(2n-1)
+      background-color: #DDD
 
     div.content
+      @include center-absolute()
+      position: relative
+      width: 500px
       padding: 5px
       background-color: red

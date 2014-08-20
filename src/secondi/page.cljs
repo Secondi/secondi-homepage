@@ -18,7 +18,6 @@
 (defn generic-page [name body-description]
   (->GenericPage name body-description))
 
-
 ;; om component
 ;; ----------------------------------------------------------------------------
 
@@ -40,5 +39,4 @@
     om/IRenderState
     (render-state [this state]
                   (dom/div #js {:className "sectionWrapper general-page"}
-                           (section-banner page)
                            (dom/div #js {:className "content"} (:body-description page))))))
