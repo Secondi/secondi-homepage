@@ -11,7 +11,10 @@
   (handle-frontpage [this])
   (handle-isolation [this]))
 
+(defprotocol IGenericPage)
+
 (defrecord GenericPage [name body-description])
+
 (defn generic-page [name body-description]
   (->GenericPage name body-description))
 
