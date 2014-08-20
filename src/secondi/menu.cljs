@@ -9,10 +9,15 @@
       (string/lower-case)
       (string/replace " " "-")))
 
+(defn menu-square []
+  (dom/div #js {:className "nav-square"} nil))
+
 (defn menu-item-view [item owner]
   (om/component
    (dom/li nil
-           (dom/a #js {:href (slug item)} (:name item)))))
+           (dom/a #js {:href (slug item)}
+                  (str (:name item))
+                  (menu-square)))))
 
 (defn menu-view [app owner]
   (reify

@@ -10,9 +10,17 @@
       > li
         @include fill-parent()
         @include span-columns(1 of 6)
+
         a
+          text-align: center
           display: block
-          float: left
+
+          div.nav-square
+            margin: 0 auto
+            width: 10px
+            height: 10px
+            background-color: pink
+
 
 
     @include media(min-width $medium-screen)
