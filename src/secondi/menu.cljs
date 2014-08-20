@@ -1,18 +1,16 @@
 (ns secondi.menu
   (:require [om.core :as om :include-macros true]
-            [om.dom :as dom :include-macros true]
-            [secondi.page :as page]
-            [clojure.string :as string]))
+            [om.dom :as dom :include-macros true]))
 
-(defn slug [{:keys [name]}]
-        (-> name
-            (string/lower-case)
-            (string/replace " " "-")))
+(defn menu-square []
+  (dom/div #js {:className "nav-square"} nil))
 
 (defn menu-item-view [item owner]
   (om/component
    (dom/li nil
-           (dom/a #js {:href (slug item)} (:name item)))))
+           (dom/a #js {:href (:slug item)}
+                  (str (get-in item [:page :name]))
+                  (menu-square)))))
 
 (defn menu-view [app owner]
   (reify
@@ -24,5 +22,6 @@
                 (js/console.log (om/get-state owner :hello)))
     om/IRenderState
     (render-state [this state]
-                  (apply dom/ul #js {:className "menu"}
-                         (om/build-all menu-item-view (:areas app))))))
+                  (dom/div #js {:className "menuWrapper"}
+                           (apply dom/ul #js {:className "menu"}
+                                  (om/build-all menu-item-view (:areas app)))))))
