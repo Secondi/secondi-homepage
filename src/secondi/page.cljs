@@ -6,9 +6,7 @@
 ;; protocol
 ;; ----------------------------------------------------------------------------
 (defprotocol IPageNavigation
-  (navigate-to [this])
-  (transition-to [this])
-  (transition-away [this]))
+  (create-slug [this]))
 
 (defprotocol IPageState
   (handle-frontpage [this])
@@ -20,21 +18,23 @@
 ;; ----------------------------------------------------------------------------
 
 (defrecord GenericPage [name body-description])
-(defrecord NavigatePage [page slug])
+(defrecord NavigatePage [page]
+  IPageNavigation
+  (create-slug [this]
+               (-> (get-in this [:page :name])
+                   (string/lower-case)
+                   (string/replace " " "-"))))
 
 ;; primitive extension of page
 ;; ----------------------------------------------------------------------------
 
+
 (defn generic-page [name body-description]
   (->GenericPage name body-description))
 
-(defn slug [name]
-  (-> name
-      (string/lower-case)
-      (string/replace " " "-")))
-
 (defn navigate-page [name body-description]
-  (->NavigatePage (generic-page name body-description) (slug name)))
+  (->NavigatePage (generic-page name body-description)))
+
 
 ;; om component
 ;; ----------------------------------------------------------------------------

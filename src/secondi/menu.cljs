@@ -1,6 +1,7 @@
 (ns secondi.menu
   (:require [om.core :as om :include-macros true]
-            [om.dom :as dom :include-macros true]))
+            [om.dom :as dom :include-macros true]
+            [secondi.page :as page]))
 
 
 ;; om component
@@ -12,9 +13,12 @@
 (defn menu-item-view [item owner]
   (om/component
    (dom/li nil
-           (dom/a #js {:className "link" :href (:slug item)}
+           (dom/a #js {:className "link" :href (page/create-slug (.-value item))}
                   (get-in item [:page :name])
                   (menu-square)))))
+
+(defn nav-items [areas]
+  (filter #(satisfies? page/IPageNavigation (.-value %)) areas))
 
 (defn menu-view [app owner]
   (reify
@@ -28,4 +32,4 @@
     (render-state [this state]
                   (dom/div #js {:className "menuWrapper"}
                            (apply dom/ul #js {:className "menu"}
-                                  (om/build-all menu-item-view (:areas app)))))))
+                                  (om/build-all menu-item-view (nav-items (:areas app))))))))

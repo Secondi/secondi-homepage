@@ -19,13 +19,12 @@
 ;; ----------------------------------------------------------------------------
 
 (defonce app-state (atom {:view :home
-                          :areas [(page/navigate-page "Video" "A whole lot of video")
-                                  (page/navigate-page "About Us" "hello this is about us")
-                                  (page/navigate-page "Rainbow Series" "you like rainbows?")
-                                  (page/navigate-page "Sign Up" "you should sign up to the mailing list")
+                          :areas [(page/navigate-page "About" "hello this is about us")
+                                  (page/navigate-page "Music" "I like music, we like music, you like too?")
+                                  (page/navigate-page "Video" "A whole lot of video")
                                   (page/navigate-page "Blog" "blog with me")
-                                  (page/navigate-page "Music" "I like music, we like music, you like too?")]}))
-
+                                  (page/navigate-page "Rainbow" "you like rainbows?")
+                                  (page/generic-page "Sign Up" "you should sign up to the mailing list")]}))
 
 ;; root om component
 ;; ----------------------------------------------------------------------------
