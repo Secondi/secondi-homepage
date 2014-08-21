@@ -31,6 +31,7 @@
                 (js/console.log (om/get-state owner :hello)))
     om/IRenderState
     (render-state [this state]
-                  (dom/div #js {:className "menuWrapper"}
-                           (apply dom/ul #js {:className "menu"}
-                                  (om/build-all menu-item-view (nav-items (:areas app))))))))
+                  (dom/div #js {:className "menuOccupy"}
+                           (dom/div #js {:className "menuWrapper"}
+                                    (apply dom/ul #js {:className "menu"}
+                                           (om/build-all menu-item-view (nav-items (:areas app)))))))))
