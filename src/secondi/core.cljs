@@ -34,12 +34,12 @@
   (let [view (:view app)
         component (condp = view
                     :home (:areas app)
-                    :video (:areas app)
-                    :about-us (:areas app)
-                    :rainbow-series (:areas app)
-                    :sign-up (:areas app)
-                    :blog (:areas app)
-                    :music (:areas app))]
+                    :video [(nth (:areas app) 0)]
+                    :about-us [(nth (:areas app) 1)]
+                    :rainbow-series [(nth (:areas app) 2)]
+                    :sign-up [(nth (:areas app) 3)]
+                    :blog [(nth (:areas app) 4)]
+                    :music [(nth (:areas app) 5)])]
     (om/component
      (dom/div nil
               (om/build menu/menu-view app)
