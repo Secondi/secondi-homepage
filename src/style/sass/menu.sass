@@ -1,5 +1,8 @@
 @import 'utils'
 
+@mixin nav-center()
+
+
 @mixin menu-base($large-screen, $medium-screen, $large-width, $medium-width)
   div.menuWrapper
     width: 100%
@@ -10,18 +13,24 @@
       > li
         @include fill-parent()
         @include span-columns(1 of 5)
-
         a
-          text-align: center
           display: block
 
-          div.nav-square
-            margin: 0 auto
-            width: 10px
-            height: 10px
-            background-color: pink
+          div.wrapper
+            padding-top: 60px
+            padding-bottom: 10px
 
+            div.nav-square
+              position: relative
+              margin: 0 auto
+              width: 10px
+              height: 10px
+              background-color: pink
 
+              div.nav-name
+                @include center-nav()
+                top: -30px
+                text-align: center
 
     @include media(min-width $medium-screen)
       ul.menu

@@ -7,15 +7,16 @@
 ;; om component
 ;; ----------------------------------------------------------------------------
 
-(defn menu-square []
-  (dom/div #js {:className "nav-square"} nil))
+(defn menu-square [name]
+  (dom/div #js {:className "nav-square"}
+           (dom/div #js {:className "nav-name"} name)))
 
 (defn menu-item-view [item owner]
   (om/component
    (dom/li nil
            (dom/a #js {:className "link" :href (page/create-slug (.-value item))}
-                  (get-in item [:page :name])
-                  (menu-square)))))
+                  (dom/div #js {:className "wrapper"}
+                           (menu-square (get-in item [:page :name])))))))
 
 (defn nav-items [areas]
   (filter #(satisfies? page/IPageNavigation (.-value %)) areas))
