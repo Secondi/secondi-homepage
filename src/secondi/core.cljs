@@ -24,8 +24,7 @@
                                   (page/navigate-page "Video" "A whole lot of video")
                                   (page/navigate-page "Blog" "blog with me")
                                   (page/navigate-page "Rainbow" "you like rainbows?")
-                                  (page/general-page "Sign Up" "you should sign up to the mailing list")]}))
-
+                                  (page/navigate-page "Sign Up" "you should sign up to the mailing list")]}))
 
 ;; root om component
 ;; ----------------------------------------------------------------------------

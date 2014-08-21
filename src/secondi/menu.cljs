@@ -1,6 +1,7 @@
 (ns secondi.menu
   (:require [om.core :as om :include-macros true]
-            [om.dom :as dom :include-macros true]))
+            [om.dom :as dom :include-macros true]
+            [secondi.page :as page]))
 
 
 ;; om component
@@ -12,7 +13,7 @@
 (defn menu-item-view [item owner]
   (om/component
    (dom/li nil
-           (dom/a #js {:className "link" :href (:slug item)}
+           (dom/a #js {:className "link" :href (page/create-slug (.-value item))}
                   (get-in item [:page :name])
                   (menu-square)))))
 
