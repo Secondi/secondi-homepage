@@ -3,7 +3,9 @@
 @mixin nav-center()
 
 
-@mixin menu-base($large-screen, $medium-screen, $large-width, $medium-width)
+@mixin menu-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background)
+  $nav-font: #B2B5B4
+  $aboutus-background: #F15098
 
   div.menuOccupy
     width: 100%
@@ -12,7 +14,7 @@
   div.menuWrapper
     width: 100%
     position: fixed
-    background-color: white
+    background-color: $nav-background
     z-index: 1000
 
     ul.menu
@@ -23,21 +25,22 @@
         @include span-columns(1 of 5)
         a
           display: block
+          color: $nav-font
 
           div.wrapper
             padding-top: 40px
-            padding-bottom: 10px
+            padding-bottom: 15px
 
             div.nav-square
               position: relative
               margin: 0 auto
               width: 10px
               height: 10px
-              background-color: pink
+              background-color: $aboutus-background
 
               div.nav-name
                 @include center-nav()
-                top: -30px
+                top: -28px
                 text-align: center
 
     @include media(min-width $medium-screen)
