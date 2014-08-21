@@ -17,6 +17,9 @@
                   (get-in item [:page :name])
                   (menu-square)))))
 
+(defn nav-items [areas]
+  (filter #(satisfies? page/IPageNavigation (.-value %)) areas))
+
 (defn menu-view [app owner]
   (reify
     om/IInitState
@@ -29,4 +32,4 @@
     (render-state [this state]
                   (dom/div #js {:className "menuWrapper"}
                            (apply dom/ul #js {:className "menu"}
-                                  (om/build-all menu-item-view (:areas app)))))))
+                                  (om/build-all menu-item-view (nav-items (:areas app))))))))
