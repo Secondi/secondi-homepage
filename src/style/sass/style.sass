@@ -7,6 +7,11 @@ $medium-screen: em(940)
 $large-width: em(800)
 $medium-width: em(640)
 
+$nav-background: #313533
+$header-background: #181919
+$aboutus-background: #F15098
+$mailinglist-background: #A2D5E9
+
 body
   margin: 0
 
@@ -14,4 +19,6 @@ body
 @include general-page()
 
 @import 'menu'
-@include menu-base($large-screen, $medium-screen, $large-width, $medium-width)
+@include menu-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background)
+@include menu-minimized()
+@include menu-full()
