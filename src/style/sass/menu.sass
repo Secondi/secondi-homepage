@@ -18,7 +18,7 @@ $nav-square: #F15098
 
         div.nav-name
           visibility: hidden
-
+          color: lighten($nav-font, 10)
 
     a:hover
       div.nav-square
@@ -27,6 +27,8 @@ $nav-square: #F15098
           @include vertical-align()
           visibility: visible
           top: -6px
+          @include transition(color 0.1s linear)
+          color: $nav-font
 
 
 @mixin menu-full
