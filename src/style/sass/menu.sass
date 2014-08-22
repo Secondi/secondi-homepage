@@ -17,7 +17,16 @@ $nav-square: #F15098
         background-color: white
 
         div.nav-name
-          display: none
+          visibility: hidden
+
+
+    a:hover
+      div.nav-square
+        visibility: hidden
+        > div.nav-name
+          @include vertical-align()
+          visibility: visible
+          top: -6px
 
 
 @mixin menu-full
@@ -36,8 +45,7 @@ $nav-square: #F15098
       div.nav-square
         background-color: $nav-square
 
-        div.nav-name
-          @include center-nav()
+        > div.nav-name
           top: -28px
           text-align: center
 
@@ -70,6 +78,9 @@ $nav-square: #F15098
             margin: 0 auto
             width: 10px
             height: 10px
+
+            > div.nav-name
+              @include center-nav()
 
     @include media(min-width $medium-screen)
       ul.menu
