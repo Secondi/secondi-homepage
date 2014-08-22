@@ -3,11 +3,7 @@
   (:require [goog.events :as events]
             [goog.events.EventType]
             [goog.history.EventType]
-            [goog.net.Jsonp]
-            [goog.Uri]
-            [goog.dom :as gdom]
-            [cljs.core.async :refer [>! <! chan put! close! timeout sliding-buffer]])
-  (:require-macros [cljs.core.async.macros :refer [go alt!]])
+            [cljs.core.async :refer [chan put! sliding-buffer]])
   (:import goog.events.EventType))
 
 (defn atom? [x]
@@ -37,3 +33,6 @@
    (events/listen el (keyword->event-type type)
                   (fn [e] (when f (f e)) (put! out e)))
    out))
+
+(defn by-id [id]
+  (.getElementById js/document id))

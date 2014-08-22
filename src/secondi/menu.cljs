@@ -1,7 +1,8 @@
 (ns secondi.menu
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [secondi.page :as page]))
+            [secondi.page :as page]
+            [secondi.scroll :refer [when-scrolling]]))
 
 
 ;; om component
@@ -21,6 +22,7 @@
 (defn nav-items [areas]
   (filter #(satisfies? page/IPageNavigation (.-value %)) areas))
 
+
 (defn menu-view [app owner]
   (reify
     om/IInitState
@@ -28,10 +30,14 @@
                 {})
     om/IWillMount
     (will-mount [_]
-                (js/console.log (om/get-state owner :hello)))
+                (when-scrolling #(js/console.log (.-scrollTop (om/get-node owner)))))
     om/IRenderState
     (render-state [this state]
-                  (dom/div #js {:className "menuOccupy"}
-                           (dom/div #js {:className "menuWrapper"}
-                                    (apply dom/ul #js {:className "menu"}
-                                           (om/build-all menu-item-view (nav-items (:areas app)))))))))
+                  (dom/div #js {:className "menuWrapper"}
+                           (apply dom/ul #js {:className "menu"}
+                                  (om/build-all menu-item-view (nav-items (:areas app))))))))
+
+(defn menu-wrapper [app owner]
+  (om/component
+   (dom/div #js {:className "menuOccupy"}
+            (om/build menu-view app))))

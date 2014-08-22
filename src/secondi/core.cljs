@@ -41,7 +41,7 @@
                     :music [(nth (:areas app) 5)])]
     (om/component
      (dom/div nil
-              (om/build menu/menu-view app)
+              (om/build menu/menu-wrapper app)
               (apply dom/div nil
                      (om/build-all page/page-view component))))))
 
