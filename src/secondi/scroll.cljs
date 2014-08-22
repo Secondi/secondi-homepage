@@ -6,5 +6,6 @@
 (defn when-scrolling [f]
   (let [scroll-c (listen js/window :scroll)]
   (go (while true
-        (<! scroll-c)
-        (f)))))
+        (let [result (<! scroll-c)
+              y-position (.. result -currentTarget -pageYOffset)]
+          (f y-position))))))

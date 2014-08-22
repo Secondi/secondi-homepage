@@ -2,7 +2,8 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [secondi.page :as page]
-            [secondi.scroll :refer [when-scrolling]]))
+            [secondi.scroll :refer [when-scrolling]]
+            [clojure.string :as string]))
 
 
 ;; om component
@@ -23,6 +24,10 @@
   (filter #(satisfies? page/IPageNavigation (.-value %)) areas))
 
 
+(defn menu-class [state]
+  (clj->js (merge {:className (string/join " " ["menuWrapper"
+                                   (if (> 300 (:scrollY state)) "full" "minimized")])})))
+
 (defn menu-view [app owner]
   (reify
     om/IInitState
@@ -30,10 +35,10 @@
                 {})
     om/IWillMount
     (will-mount [_]
-                (when-scrolling #(js/console.log (.-scrollTop (om/get-node owner)))))
+                (when-scrolling #(om/set-state! owner :scrollY %)))
     om/IRenderState
     (render-state [this state]
-                  (dom/div #js {:className "menuWrapper"}
+                  (dom/div (menu-class state)
                            (apply dom/ul #js {:className "menu"}
                                   (om/build-all menu-item-view (nav-items (:areas app))))))))
 
