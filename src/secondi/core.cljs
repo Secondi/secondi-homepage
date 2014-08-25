@@ -29,21 +29,32 @@
 ;; root om component
 ;; ----------------------------------------------------------------------------
 
+
+(defn get-navigationpage
+  "
+  this will return the page that's been selected if it implements page/IPageNavigation
+  current - the page that has been selected in the app-state
+  areas - a vector of the pages that are in the website
+  "
+  [current areas]
+  (loop [pages (.-value areas)]
+    (let [current-page (first pages)]
+      (if (and (satisfies? page/IPageNavigation current-page)
+               (= current (keyword (page/create-slug current-page))))
+        current-page
+        (when (> (count pages) 0) (recur (rest pages)))))))
+
 (defn secondi-app [app owner]
-  (let [view (:view app)
-        component (condp = view
-                    :home (:areas app)
-                    :video [(nth (:areas app) 0)]
-                    :about-us [(nth (:areas app) 1)]
-                    :rainbow-series [(nth (:areas app) 2)]
-                    :sign-up [(nth (:areas app) 3)]
-                    :blog [(nth (:areas app) 4)]
-                    :music [(nth (:areas app) 5)])]
-    (om/component
-     (dom/div nil
-              (om/build menu/menu-wrapper app)
-              (apply dom/div nil
-                     (om/build-all page/page-view component))))))
+  (reify
+    om/IRenderState
+    (render-state [this state]
+                  (dom/div nil
+                           (om/build menu/menu-wrapper app)
+                           (let [view (:view app)]
+                             (if (= :home view)
+                               (apply dom/div nil
+                                      (om/build-all page/page-view (:areas app)))
+                               (om/build page/page-view (get-navigationpage view (:areas app)))))))))
 
 (om/root secondi-app app-state
          {:target (. js/document (getElementById "page"))})
