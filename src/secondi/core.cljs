@@ -1,7 +1,7 @@
 (ns secondi.core
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [secondi.page :as page]
+            [secondi.pages.generic :as page]
             [secondi.menu :as menu]
             [secondi.dom :refer [get-anchor has-class by-id]]
             [secondi.reactive :refer [listen]]

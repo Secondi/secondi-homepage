@@ -1,7 +1,7 @@
 (ns secondi.menu
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [secondi.page :as page]
+            [secondi.pages.generic :as page]
             [secondi.scroll :refer [when-scrolling]]
             [clojure.string :as string]))
 
