@@ -52,9 +52,3 @@
     (render-state [this state]
                   (dom/div #js {:className "sectionWrapper general-page"}
                            (dom/div #js {:className "content"} (get-in page [:page :body-description] "boo"))))))
-
-;; music page view
-(defn music-view [page owner]
-  (om/component
-   (dom/div #js {:className "sectionWrapper general-page"}
-            (dom/div #js {:className "content"} (get-in page [:page :body-description] "boo")))))

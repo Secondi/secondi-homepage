@@ -1,7 +1,7 @@
 (ns secondi.core
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [secondi.pages.generic :as page]
+            [secondi.pages.generic :as generic]
             [secondi.menu :as menu]
             [secondi.dom :refer [get-anchor has-class by-id]]
             [secondi.reactive :refer [listen]]
@@ -19,12 +19,12 @@
 ;; ----------------------------------------------------------------------------
 
 (defonce app-state (atom {:view :home
-                          :areas [(page/navigate-page "About" "hello this is about us")
-                                  (page/navigate-page "Music" "I like music, we like music, you like too?")
-                                  (page/navigate-page "Video" "A whole lot of video")
-                                  (page/navigate-page "Blog" "blog with me")
-                                  (page/navigate-page "Rainbow" "you like rainbows?")
-                                  (page/generic-page "Sign Up" "you should sign up to the mailing list")]}))
+                          :areas [(generic/navigate-page "About" "hello this is about us")
+                                  (generic/navigate-page "Music" "I like music, we like music, you like too?")
+                                  (generic/navigate-page "Video" "A whole lot of video")
+                                  (generic/navigate-page "Blog" "blog with me")
+                                  (generic/navigate-page "Rainbow" "you like rainbows?")
+                                  (generic/generic-page "Sign Up" "you should sign up to the mailing list")]}))
 
 ;; root om component
 ;; ----------------------------------------------------------------------------
@@ -32,15 +32,15 @@
 
 (defn get-navigationpage
   "
-  this will return the page that's been selected if it implements page/IPageNavigation
+  this will return the page that's been selected if it implements generic/IPageNavigation
   current - the page that has been selected in the app-state
   areas - a vector of the pages that are in the website
   "
   [current areas]
   (loop [pages (.-value areas)]
     (let [current-page (first pages)]
-      (if (and (satisfies? page/IPageNavigation current-page)
-               (= current (keyword (page/create-slug current-page))))
+      (if (and (satisfies? generic/IPageNavigation current-page)
+               (= current (keyword (generic/create-slug current-page))))
         current-page
         (when (> (count pages) 0) (recur (rest pages)))))))
 
@@ -53,8 +53,8 @@
                            (let [view (:view app)]
                              (if (= :home view)
                                (apply dom/div nil
-                                      (om/build-all page/page-view (:areas app)))
-                               (om/build page/page-view (get-navigationpage view (:areas app)))))))))
+                                      (om/build-all generic/page-view (:areas app)))
+                               (om/build generic/page-view (get-navigationpage view (:areas app)))))))))
 
 (om/root secondi-app app-state
          {:target (. js/document (getElementById "page"))})
