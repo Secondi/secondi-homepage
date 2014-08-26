@@ -22,7 +22,7 @@
   (set-position [this] nil))
 
 (defn music-track [name _]
-  (->MusicTrack name nil))
+  (->SoundcloudTrack name nil))
 
 (defprotocol IPlaylist
   (play-next [this] [this next-track]))
@@ -54,17 +54,17 @@
 (def img-2 "http://www.anticatrattoriabellaria.it/upload/thumb500/1301264205.jpg")
 (def img-3 "http://3.bp.blogspot.com/-IXpItzpZr3w/T6dyViU3DkI/AAAAAAAAGHA/_r9xVqMkMPM/s1600/IMG_1686.JPG")
 
-(def temp-playlists [(playlist "this is" img1 [(music-track "hello" 1)
+(def temp-playlists [(playlist "this is" img-1 [(music-track "hello" 1)
                                                (music-track "there" 1)
                                                (music-track "i'm" 1)
                                                (music-track "dummy" 1)
                                                (music-track "data" 1)])
-                     (playlist "secondi food" img2 [(music-track "watch me" 1)
+                     (playlist "secondi food" img-2 [(music-track "watch me" 1)
                                                     (music-track "play" 1)
                                                     (music-track "i'll" 1)
                                                     (music-track "choose" 1)
                                                     (music-track "anti-mage" 1)])
-                     (playlist "from italy, apparently" img3 [(music-track "care" 1)
+                     (playlist "from italy, apparently" img-3 [(music-track "care" 1)
                                                               (music-track "i'm" 1)
                                                               (music-track "tummy" 1)
                                                               (music-track "laughter" 1)])])
