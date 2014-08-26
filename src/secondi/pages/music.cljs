@@ -3,8 +3,40 @@
             [om.dom :as dom :include-macros true]
             [secondi.pages.generic :as generic]))
 
-;; types
+;; sound types
 ;; ----------------------------------------------------------------------------
+
+(defprotocol ITrack
+  (prepare-track [this])
+  (play-track [this])
+  (stop-track [this])
+  (current-position [this])
+  (set-position [this]))
+
+(defrecord SoundcloudTrack [name soundmanager]
+  ITrack
+  (prepare-track [this] nil)
+  (play-track [this] nil)
+  (stop-track [this] nil)
+  (current-position [this] nil)
+  (set-position [this] nil))
+
+(defn music-track [name _]
+  (->MusicTrack name nil))
+
+(defprotocol IPlaylist
+  (play-next [this] [this next-track]))
+
+(defrecord Playlist [name album-cover track-collection]
+  IPlaylist
+  (play-next [this] nil))
+
+(defn playlist [name album-cover track-collection]
+  (->Playlist name album-cover track-collection))
+
+;; page extension
+;; ----------------------------------------------------------------------------
+
 
 (defrecord MusicPage [navigation-page]
   generic/IPageNavigation
@@ -24,6 +56,9 @@
    [this]
    (fn [app-state owner]
      (reify
+       om/IInitState
+       (init-state [_]
+                   {:sections []})
        om/IRender
        (render [_]
                (dom/div #js {:className "sectionWrapper general-page"}

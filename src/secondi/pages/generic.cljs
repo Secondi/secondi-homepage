@@ -12,8 +12,6 @@
   (handle-frontpage [this])
   (handle-isolation [this]))
 
-(defprotocol IGenericPage)
-
 (defprotocol ICustomPage
   (custom-page [this]))
 
@@ -33,7 +31,6 @@
 
 ;; primitive extension of page
 ;; ----------------------------------------------------------------------------
-
 
 (defn generic-page [name body-description]
   (->GenericPage name body-description))
