@@ -25,7 +25,8 @@
                                   (generic/navigate-page "Video" "A whole lot of video")
                                   (generic/navigate-page "Blog" "blog with me")
                                   (generic/navigate-page "Rainbow" "you like rainbows?")
-                                  (generic/generic-page "Sign Up" "you should sign up to the mailing list")]}))
+                                  (generic/generic-page "Sign Up" "you should sign up to the mailing list")]
+                          :music :loading}))
 
 ;; root om component
 ;; ----------------------------------------------------------------------------
@@ -45,7 +46,11 @@
         current-page
         (when (> (count pages) 0) (recur (rest pages)))))))
 
-(defn render-page [view-state areas]
+(defn render-page
+  "
+  decide and render either a general or custom page
+  "
+  [view-state areas]
   (let [current-page (get-navigationpage view-state areas)]
     (om/build (if (satisfies? generic/ICustomPage current-page)
                 (generic/custom-page current-page)
@@ -97,8 +102,7 @@
 (def navigation-c (listen history :navigate))
 
 (go (while true
-      (let [[v c] (alts! [
-                          click-c
+      (let [[v c] (alts! [click-c
                           navigation-c])]
         (condp = c
           click-c (let [anchor (get-anchor (.-target v))
