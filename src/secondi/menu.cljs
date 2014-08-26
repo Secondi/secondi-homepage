@@ -1,7 +1,7 @@
 (ns secondi.menu
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [secondi.pages.generic :as page]
+            [secondi.pages.generic :as generic]
             [secondi.scroll :refer [when-scrolling]]
             [clojure.string :as string]))
 
@@ -13,15 +13,22 @@
   (dom/div #js {:className "nav-square"}
            (dom/div #js {:className "nav-name"} name)))
 
+(defn nav-name [page]
+  (if (satisfies? generic/ICustomPage (.-value page))
+    (get-in page [:navigation-page :page :name])
+    (get-in page [:page :name])))
+
 (defn menu-item-view [item owner]
   (om/component
    (dom/li nil
-           (dom/a #js {:className "link" :href (page/create-slug (.-value item))}
-                  (dom/div #js {:className "wrapper"}
-                           (menu-square (get-in item [:page :name])))))))
+           (dom/a #js {:className "link" :href (generic/create-slug (.-value item))}
+                  (->> item
+                      (nav-name)
+                      (menu-square)
+                      (dom/div #js {:className "wrapper"}))))))
 
 (defn nav-items [areas]
-  (filter #(satisfies? page/IPageNavigation (.-value %)) areas))
+  (filter #(satisfies? generic/IPageNavigation (.-value %)) areas))
 
 
 (defn menu-class [state]
