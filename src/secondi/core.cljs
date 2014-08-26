@@ -1,7 +1,8 @@
 (ns secondi.core
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [secondi.page :as page]
+            [secondi.pages.generic :as generic]
+            [secondi.pages.music :as music]
             [secondi.menu :as menu]
             [secondi.dom :refer [get-anchor has-class by-id]]
             [secondi.reactive :refer [listen]]
@@ -19,12 +20,13 @@
 ;; ----------------------------------------------------------------------------
 
 (defonce app-state (atom {:view :home
-                          :areas [(page/navigate-page "About" "hello this is about us")
-                                  (page/navigate-page "Music" "I like music, we like music, you like too?")
-                                  (page/navigate-page "Video" "A whole lot of video")
-                                  (page/navigate-page "Blog" "blog with me")
-                                  (page/navigate-page "Rainbow" "you like rainbows?")
-                                  (page/generic-page "Sign Up" "you should sign up to the mailing list")]}))
+                          :areas [(generic/navigate-page "About" "hello this is about us")
+                                  (music/music-page "Music" "I like music, we like music, you like too?")
+                                  (generic/navigate-page "Video" "A whole lot of video")
+                                  (generic/navigate-page "Blog" "blog with me")
+                                  (generic/navigate-page "Rainbow" "you like rainbows?")
+                                  (generic/generic-page "Sign Up" "you should sign up to the mailing list")]
+                          :music :loading}))
 
 ;; root om component
 ;; ----------------------------------------------------------------------------
@@ -32,17 +34,27 @@
 
 (defn get-navigationpage
   "
-  this will return the page that's been selected if it implements page/IPageNavigation
+  this will return the page that's been selected if it implements generic/IPageNavigation
   current - the page that has been selected in the app-state
   areas - a vector of the pages that are in the website
   "
   [current areas]
   (loop [pages (.-value areas)]
     (let [current-page (first pages)]
-      (if (and (satisfies? page/IPageNavigation current-page)
-               (= current (keyword (page/create-slug current-page))))
+      (if (and (satisfies? generic/IPageNavigation current-page)
+               (= current (keyword (generic/create-slug current-page))))
         current-page
         (when (> (count pages) 0) (recur (rest pages)))))))
+
+(defn render-page
+  "
+  decide and render either a general or custom page
+  "
+  [view-state areas]
+  (let [current-page (get-navigationpage view-state areas)]
+    (om/build (if (satisfies? generic/ICustomPage current-page)
+                (generic/custom-page current-page)
+                generic/page-view) current-page)))
 
 (defn secondi-app [app owner]
   (reify
@@ -53,8 +65,8 @@
                            (let [view (:view app)]
                              (if (= :home view)
                                (apply dom/div nil
-                                      (om/build-all page/page-view (:areas app)))
-                               (om/build page/page-view (get-navigationpage view (:areas app)))))))))
+                                      (om/build-all generic/page-view (:areas app)))
+                               (render-page view (:areas app))))))))
 
 (om/root secondi-app app-state
          {:target (. js/document (getElementById "page"))})
@@ -90,8 +102,7 @@
 (def navigation-c (listen history :navigate))
 
 (go (while true
-      (let [[v c] (alts! [
-                          click-c
+      (let [[v c] (alts! [click-c
                           navigation-c])]
         (condp = c
           click-c (let [anchor (get-anchor (.-target v))

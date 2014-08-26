@@ -1,4 +1,4 @@
-(ns secondi.page
+(ns secondi.pages.generic
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [clojure.string :as string]))
@@ -14,16 +14,22 @@
 
 (defprotocol IGenericPage)
 
+(defprotocol ICustomPage
+  (custom-page [this]))
+
 ;; records
 ;; ----------------------------------------------------------------------------
+
+(defn make-slug [text]
+  (-> text
+      (string/lower-case)
+      (string/replace " " "-")))
 
 (defrecord GenericPage [name body-description])
 (defrecord NavigatePage [page]
   IPageNavigation
   (create-slug [this]
-               (-> (get-in this [:page :name])
-                   (string/lower-case)
-                   (string/replace " " "-"))))
+               (make-slug (get-in this [:page :name]))))
 
 ;; primitive extension of page
 ;; ----------------------------------------------------------------------------
@@ -52,9 +58,3 @@
     (render-state [this state]
                   (dom/div #js {:className "sectionWrapper general-page"}
                            (dom/div #js {:className "content"} (get-in page [:page :body-description] "boo"))))))
-
-;; music page view
-(defn music-view [page owner]
-  (om/component
-   (dom/div #js {:className "sectionWrapper general-page"}
-            (dom/div #js {:className "content"} (get-in page [:page :body-description] "boo")))))
