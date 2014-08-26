@@ -2,6 +2,7 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [secondi.pages.generic :as generic]
+            [secondi.pages.music :as music]
             [secondi.menu :as menu]
             [secondi.dom :refer [get-anchor has-class by-id]]
             [secondi.reactive :refer [listen]]
@@ -20,7 +21,7 @@
 
 (defonce app-state (atom {:view :home
                           :areas [(generic/navigate-page "About" "hello this is about us")
-                                  (generic/navigate-page "Music" "I like music, we like music, you like too?")
+                                  (music/music-page "Music" "I like music, we like music, you like too?")
                                   (generic/navigate-page "Video" "A whole lot of video")
                                   (generic/navigate-page "Blog" "blog with me")
                                   (generic/navigate-page "Rainbow" "you like rainbows?")
@@ -44,6 +45,12 @@
         current-page
         (when (> (count pages) 0) (recur (rest pages)))))))
 
+(defn render-page [view-state areas]
+  (let [current-page (get-navigationpage view-state areas)]
+    (om/build (if (satisfies? generic/ICustomPage current-page)
+                (generic/custom-page current-page)
+                generic/page-view) current-page)))
+
 (defn secondi-app [app owner]
   (reify
     om/IRenderState
@@ -54,7 +61,7 @@
                              (if (= :home view)
                                (apply dom/div nil
                                       (om/build-all generic/page-view (:areas app)))
-                               (om/build generic/page-view (get-navigationpage view (:areas app)))))))))
+                               (render-page view (:areas app))))))))
 
 (om/root secondi-app app-state
          {:target (. js/document (getElementById "page"))})

@@ -14,16 +14,22 @@
 
 (defprotocol IGenericPage)
 
+(defprotocol ICustomPage
+  (custom-page [this]))
+
 ;; records
 ;; ----------------------------------------------------------------------------
+
+(defn make-slug [text]
+  (-> text
+      (string/lower-case)
+      (string/replace " " "-")))
 
 (defrecord GenericPage [name body-description])
 (defrecord NavigatePage [page]
   IPageNavigation
   (create-slug [this]
-               (-> (get-in this [:page :name])
-                   (string/lower-case)
-                   (string/replace " " "-"))))
+               (make-slug (get-in this [:page :name]))))
 
 ;; primitive extension of page
 ;; ----------------------------------------------------------------------------
