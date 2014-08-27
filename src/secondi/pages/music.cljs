@@ -75,14 +75,13 @@
 (defn track-view [track owner]
   (reify
     om/IRenderState
-    (render-state [this state]
+    (render-state [_ state]
                   (dom/div nil "track"))))
 
 (defn playlist-view [playlist owner]
   (reify
     om/IRenderState
-    (render-state [this state]
-                  (js/console.log playlist)
+    (render-state [_ state]
                   (apply dom/div nil
                          (om/build-all track-view (:track-collection playlist))))))
 
@@ -92,7 +91,7 @@
 (defn album-view [album owner]
   (reify
     om/IRenderState
-    (render-state [this state]
+    (render-state [_ state]
                   (dom/div nil
                            (dom/p nil "albums...")))))
 
@@ -102,7 +101,7 @@
     (init-state [_]
                 {:current-album (first albums)})
     om/IRenderState
-    (render-state [this state]
+    (render-state [_ state]
                   (dom/div nil
                            (apply dom/div #js {:id "albums"}
                                   (om/build-all album-view albums))
