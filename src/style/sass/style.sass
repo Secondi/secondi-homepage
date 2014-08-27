@@ -4,7 +4,7 @@
 
 $large-screen: em(1080)
 $medium-screen: em(940)
-$large-width: em(800)
+$large-width: 800px
 $medium-width: em(640)
 
 $nav-background: #313533
@@ -22,3 +22,6 @@ body
 @include menu-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background)
 @include menu-minimized()
 @include menu-full()
+
+@import 'music'
+@include music-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background)

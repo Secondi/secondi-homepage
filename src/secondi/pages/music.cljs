@@ -90,13 +90,16 @@
 ;; album view component
 ;; ----------------------------------------------------------------------------
 
+(defn background-img [src]
+  (str "url(" src ")"))
+
 (defn album-view [album owner]
   (reify
     om/IRenderState
     (render-state [_ state]
-                  (dom/div nil
-                           (dom/img #js {:src (:album-cover album)
-                                         :onClick #(js/console.log (str "you have clicked: " (:name album)))} nil)))))
+                  (dom/div #js {:className "album"
+                                :onClick #(js/console.log (str "you have clicked: " (:name album)))
+                                :style #js {:background (background-img (:album-cover album))}}))))
 
 (defn albumlist-view [albums owner]
   (reify

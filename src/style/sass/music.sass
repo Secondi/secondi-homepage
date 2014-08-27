@@ -1,0 +1,34 @@
+
+@mixin albums($large-width)
+  //Expecting 3 albums to be displayed in each row
+  $album-count: 3
+  // 5px margin between each album.
+  $album-margin: 10px
+
+  $album-size: ($large-width - (($album-count - 1) * $album-margin)) / $album-count
+
+  div#albums
+    @include clearfix()
+    //float: left
+
+    div.album
+      float: left
+      height: $album-size
+      width: $album-size
+
+      margin-right: $album-margin
+
+      &:last-child
+        margin-right: 0
+
+
+@mixin music-base($large-screen, $medium-screen, $large-width, $medium-width, $music-background)
+  div.music-page.sectionWrapper
+    background-color: $music-background
+    > div.content
+      @include clearfix()
+      background-color: $music-background
+      padding: 0
+      width: $large-width
+
+      @include albums($large-width)
