@@ -76,7 +76,9 @@
   (reify
     om/IRenderState
     (render-state [_ state]
-                  (dom/div nil "track"))))
+                  (dom/div #js {:className "track"
+                                :onClick #(js/console.log (str "you've clicked: " (:name track)))}
+                           (dom/p nil (:name track))))))
 
 (defn playlist-view [playlist owner]
   (reify
@@ -93,7 +95,8 @@
     om/IRenderState
     (render-state [_ state]
                   (dom/div nil
-                           (dom/p nil "albums...")))))
+                           (dom/img #js {:src (:album-cover album)
+                                         :onClick #(js/console.log (str "you have clicked: " (:name album)))} nil)))))
 
 (defn albumlist-view [albums owner]
   (reify
