@@ -78,12 +78,13 @@
     (render-state [this state]
                   (dom/div nil "track"))))
 
-(defn playlist-view [tracks owner]
+(defn playlist-view [playlist owner]
   (reify
     om/IRenderState
     (render-state [this state]
+                  (js/console.log playlist)
                   (apply dom/div nil
-                           (om/build-all track-view tracks)))))
+                         (om/build-all track-view (:track-collection playlist))))))
 
 ;; album view component
 ;; ----------------------------------------------------------------------------
@@ -97,10 +98,16 @@
 
 (defn albumlist-view [albums owner]
   (reify
+    om/IInitState
+    (init-state [_]
+                {:current-album (first albums)})
     om/IRenderState
     (render-state [this state]
-                  (apply dom/div nil
-                         (om/build-all album-view albums)))))
+                  (dom/div nil
+                           (apply dom/div #js {:id "albums"}
+                                  (om/build-all album-view albums))
+                           (dom/div #js {:id "playlist"}
+                                    (om/build playlist-view (:current-album state)))))))
 
 ;; music page wrapper
 ;; ----------------------------------------------------------------------------
@@ -116,6 +123,6 @@
                    {:sections temp-playlists})
        om/IRenderState
        (render-state [_ state]
-                     (dom/div #js {:className "sectionWrapper general-page"}
-                              (dom/div #js {:className "content"} "THIS IS THE MUSIC PAGE")
-                              (om/build albumlist-view (:sections state))))))))
+                     (dom/div #js {:className "sectionWrapper music-page"}
+                              (dom/div #js {:className "content"}
+                                       (om/build albumlist-view (:sections state)))))))))
