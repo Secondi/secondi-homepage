@@ -6,7 +6,7 @@
             [secondi.menu :as menu]
             [secondi.dom :refer [get-anchor has-class by-id]]
             [secondi.reactive :refer [listen]]
-            [cljs.core.async :refer [<! >! put! chan]]
+            [cljs.core.async :refer [<! >! put! chan alts!]]
             [secretary.core :as secretary :include-macros true :refer [defroute]])
   (:import [goog.history Html5History]
            [goog Uri]
@@ -60,7 +60,7 @@
   (reify
     om/IRenderState
     (render-state [this state]
-                  (dom/div nil
+                  (dom/div #js {:className "pt-perspective"}
                            (om/build menu/menu-wrapper app)
                            (let [view (:view app)]
                              (if (= :home view)
