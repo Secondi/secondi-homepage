@@ -3,6 +3,7 @@
   (:require [goog.events :as events]
             [goog.events.EventType]
             [goog.history.EventType]
+            [goog.fx.Transition.EventType]
             [cljs.core.async :refer [chan put! sliding-buffer]])
   (:import goog.events.EventType))
 
@@ -24,7 +25,14 @@
    :blur goog.events.EventType.BLUR
    :scroll goog.events.EventType.SCROLL
    :resize goog.events.EventType.RESIZE
-   :navigate goog.history.EventType.NAVIGATE})
+   :navigate goog.history.EventType.NAVIGATE
+   :transition-play goog.fx.Transition.EventType.PLAY
+   :transition-begin goog.fx.Transition.EventType.BEGIN
+   :transition-resume goog.fx.Transition.EventType.RESUME
+   :transition-stop goog.fx.Transition.EventType.STOP
+   :transition-finish goog.fx.Transition.EventType.FINISH
+   :transition-pause goog.fx.Transition.EventType.PAUSE
+   :transition-end goog.fx.Transition.EventType.END})
 
 (defn listen
   ([el type] (listen el type nil))
