@@ -47,7 +47,7 @@
   (->MusicPage (generic/navigate-page name body-description)))
 
 
-;; om component
+;; primitive test data
 ;; ----------------------------------------------------------------------------
 
 (def img-1 "http://www.csettepiu7.it/dfiles/portate_image/carne.jpg")
@@ -55,19 +55,55 @@
 (def img-3 "http://3.bp.blogspot.com/-IXpItzpZr3w/T6dyViU3DkI/AAAAAAAAGHA/_r9xVqMkMPM/s1600/IMG_1686.JPG")
 
 (def temp-playlists [(playlist "this is" img-1 [(music-track "hello" 1)
-                                               (music-track "there" 1)
-                                               (music-track "i'm" 1)
-                                               (music-track "dummy" 1)
-                                               (music-track "data" 1)])
+                                                (music-track "there" 1)
+                                                (music-track "i'm" 1)
+                                                (music-track "dummy" 1)
+                                                (music-track "data" 1)])
                      (playlist "secondi food" img-2 [(music-track "watch me" 1)
-                                                    (music-track "play" 1)
-                                                    (music-track "i'll" 1)
-                                                    (music-track "choose" 1)
-                                                    (music-track "anti-mage" 1)])
+                                                     (music-track "play" 1)
+                                                     (music-track "i'll" 1)
+                                                     (music-track "choose" 1)
+                                                     (music-track "anti-mage" 1)])
                      (playlist "from italy, apparently" img-3 [(music-track "care" 1)
-                                                              (music-track "i'm" 1)
-                                                              (music-track "tummy" 1)
-                                                              (music-track "laughter" 1)])])
+                                                               (music-track "i'm" 1)
+                                                               (music-track "tummy" 1)
+                                                               (music-track "laughter" 1)])])
+
+;; track component
+;; ----------------------------------------------------------------------------
+
+(defn track-view [track owner]
+  (reify
+    om/IRenderState
+    (render-state [this state]
+                  (dom/div nil "track"))))
+
+(defn playlist-view [tracks owner]
+  (reify
+    om/IRenderState
+    (render-state [this state]
+                  (apply dom/div nil
+                           (om/build-all track-view tracks)))))
+
+;; album view component
+;; ----------------------------------------------------------------------------
+
+(defn album-view [album owner]
+  (reify
+    om/IRenderState
+    (render-state [this state]
+                  (dom/div nil
+                           (dom/p nil "albums...")))))
+
+(defn albumlist-view [albums owner]
+  (reify
+    om/IRenderState
+    (render-state [this state]
+                  (apply dom/div nil
+                         (om/build-all album-view albums)))))
+
+;; music page wrapper
+;; ----------------------------------------------------------------------------
 
 (extend-type MusicPage
   generic/ICustomPage
@@ -78,7 +114,8 @@
        om/IInitState
        (init-state [_]
                    {:sections temp-playlists})
-       om/IRender
-       (render [_]
-               (dom/div #js {:className "sectionWrapper general-page"}
-                        (dom/div #js {:className "content"} "THIS IS THE MUSIC PAGE")))))))
+       om/IRenderState
+       (render-state [_ state]
+                     (dom/div #js {:className "sectionWrapper general-page"}
+                              (dom/div #js {:className "content"} "THIS IS THE MUSIC PAGE")
+                              (om/build albumlist-view (:sections state))))))))
