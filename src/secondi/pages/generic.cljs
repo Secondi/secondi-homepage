@@ -1,9 +1,10 @@
 (ns secondi.pages.generic
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
+            [goog.dom :as gdom]
             [secondi.reactive :refer [listen]]
             [secondi.transition :as transition]
-            [cljs.core.async :refer [alts!]]
+            [cljs.core.async :refer [<!]]
             [clojure.string :as string])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
@@ -59,25 +60,46 @@
     om/IInitState
     (init-state [_]
                 {})
-    om/IWillMount
-    (will-mount [_]
-                {})
+    om/IWillUpdate
+    (will-update [this next-props next-state]
+                (when (not= (get-in next-props [:page :name]) (get-in page [:page :name]))
+                  (om/set-state! owner :prev-page page)))
+    om/IDidUpdate
+    (did-update [this prev-props prev-state]
+                (when (not= (get-in prev-props [:page :name]) (get-in page [:page :name]))
+                  (let [pages (gdom/getChildren (om/get-node owner))
+                        new-page (aget pages 0)
+                        old-page (aget pages 1)
+                        trans-new (transition/transition-in new-page :rotateRoomLeft)
+                        trans-old (transition/transition-out old-page :rotateRoomLeft)
+                        el-new (get-in trans-new [:transition])
+                        el-old (get-in trans-old [:transition])]
+                    (listen el-new :transition-play #(om/set-state! owner :transition transition-in))
+                    (listen el-old :transition-end #(om/set-state! owner :prev-page nil))
+                    (transition/play trans-new)
+                    (transition/play trans-old))))
     om/IDidMount
     (did-mount [_]
-               (let [trans (transition/transition-in (om/get-node owner) :rotateRoomLeft)
+               (let [trans (transition/transition-in (aget (gdom/getChildren (om/get-node owner)) 0) :rotateRoomLeft)
                      el (get-in trans [:transition])]
-                 (js/console.log "mount")
                  (listen el :transition-play #(om/set-state! owner :transition transition-in))
                  (transition/play trans)))
     om/IWillUnmount
     (will-unmount [_]
                (let [trans (transition/transition-out (om/get-node owner) :rotateRoomLeft)
-                     el (get-in trans [:transition])]
-                 (js/console.log "unmount")
+                     el (get-in trans [:transition])
+                     c (listen el :transition-end #(om/set-state! owner :transition transition-out))]
+                 (go (let [v (<! c)]
+                         (js/console.log "end")))
                  (listen el :transition-play #(om/set-state! owner :transition transition-mid))
-                 (listen el :transition-end #(om/set-state! owner :transition transition-out))
                  (transition/play trans)))
+
     om/IRenderState
     (render-state [this state]
-                  (dom/div #js {:className (str "sectionWrapper general-page pt-page " (:transition state)) :id (get-in page [:page :name])}
-                           (dom/div #js {:className "content"} (get-in page [:page :body-description] "boo"))))))
+                  (dom/div nil
+                           (dom/div #js {:className (str "sectionWrapper general-page pt-page " (:transition state)) :id (get-in page [:page :name])}
+                                    (dom/div #js {:className "content"} (get-in page [:page :body-description] "boo")))
+                           (when (:prev-page state)
+                             (let [prev-page (:prev-page state)]
+                               (dom/div #js {:className "sectionWrapper general-page pt-page pt-page-ontop pt-page-current" :id (get-in prev-page [:page :name])}
+                                        (dom/div #js {:className "content"} (get-in prev-page [:page :body-description] "boo")))))))))
