@@ -78,14 +78,17 @@
     (render-state [_ state]
                   (dom/div #js {:className "track"
                                 :onClick #(js/console.log (str "you've clicked: " (:name track)))}
-                           (dom/p nil (:name track))))))
+                           (dom/p nil (str "Track: "(:name track)))))))
 
 (defn playlist-view [playlist owner]
   (reify
     om/IRenderState
     (render-state [_ state]
-                  (apply dom/div nil
-                         (om/build-all track-view (:track-collection playlist))))))
+                  (dom/div #js {:id "playlist-wrapper"}
+                           (dom/div #js {:id "playlist"}
+                                    (dom/h2 nil (:name playlist))
+                                    (apply dom/div nil
+                                           (om/build-all track-view (:track-collection playlist))))))))
 
 ;; album view component
 ;; ----------------------------------------------------------------------------
@@ -111,8 +114,8 @@
                   (dom/div nil
                            (apply dom/div #js {:id "albums"}
                                   (om/build-all album-view albums))
-                           (dom/div #js {:id "playlist"}
-                                    (om/build playlist-view (:current-album state)))))))
+
+                           (om/build playlist-view (:current-album state))))))
 
 ;; music page wrapper
 ;; ----------------------------------------------------------------------------

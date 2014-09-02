@@ -9,8 +9,11 @@ $medium-width: em(640)
 
 $nav-background: #313533
 $header-background: #181919
+$playlist-background: #202021
 $aboutus-background: #F15098
 $mailinglist-background: #A2D5E9
+
+@import 'fonts'
 
 body
   margin: 0
@@ -24,4 +27,4 @@ body
 @include menu-full()
 
 @import 'music'
-@include music-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background)
+@include music-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background, $playlist-background)

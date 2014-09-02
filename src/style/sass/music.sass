@@ -21,9 +21,26 @@
       &:last-child
         margin-right: 0
 
+@mixin playlist($large-width, $background-colour, $playlist-background)
+  div#playlist-wrapper
+    @include padding(40px 0 40px 0)
+    @include margin(40px 20px 0 20px)
+    background: $playlist-background
 
-@mixin music-base($large-screen, $medium-screen, $large-width, $medium-width, $music-background)
+
+
+    div#playlist
+      @include margin(0 auto 0 auto)
+      width: $large-width
+      background: $playlist-background
+
+      h2
+        text-align: center
+        margin-bottom: 20px
+
+@mixin music-base($large-screen, $medium-screen, $large-width, $medium-width, $music-background, $playlist-background)
   div.music-page.sectionWrapper
+    @include padding(70px 0 0 0)
     background-color: $music-background
     > div.content
       @include clearfix()
@@ -32,3 +49,4 @@
       width: $large-width
 
       @include albums($large-width)
+      @include playlist($large-width/2, white, $playlist-background)
