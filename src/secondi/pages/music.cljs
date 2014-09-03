@@ -73,6 +73,13 @@
 ;; track component
 ;; ----------------------------------------------------------------------------
 
+(def playlist-corners
+  (dom/div nil
+           (dom/div #js {:id "corner-topleft"} nil)
+           (dom/div #js {:id "corner-topright"} nil)
+           (dom/div #js {:id "corner-bottomleft"} nil)
+           (dom/div #js {:id "corner-bottomright"} nil)))
+
 (def play-symbol "►")
 (def pause-symbol "||")
 
@@ -100,6 +107,7 @@
     om/IRenderState
     (render-state [_ state]
                   (dom/div #js {:id "playlist-wrapper"}
+                           playlist-corners
                            (dom/div #js {:id "playlist"}
                                     (dom/h2 nil (-> playlist :name string/upper-case))
                                     (apply dom/div nil
