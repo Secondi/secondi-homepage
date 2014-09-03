@@ -1,10 +1,10 @@
 
+
 @mixin albums($large-width)
   //Expecting 3 albums to be displayed in each row
   $album-count: 3
   // 5px margin between each album.
   $album-margin: 10px
-
   $album-size: ($large-width - (($album-count - 1) * $album-margin)) / $album-count
 
   div#albums
@@ -21,24 +21,65 @@
       &:last-child
         margin-right: 0
 
-@mixin playlist($large-width, $background-colour, $playlist-background)
+
+@mixin track($size, $button-color)
+
+  div.track
+    @include clearfix()
+    margin-bottom: 8px
+    position: relative
+
+    &:last-child
+      margin-bottom: 0
+
+    &:hover
+      background-color: red
+
+    //the play button will be a fancy square
+    // The square will contain either a play or pause symbol
+    div.play-button
+      background-color: $button-color
+      color: white
+      width: $size
+      height: $size
+      float: left
+      margin-right: $size * (3/4)
+
+      > span
+        @include vertical-align()
+        font-size: $size / 2
+        width: $size
+        text-align: center
+        margin: 0
+        padding: 0
+        font-weight: bold
+
+    span.track-text
+      @include vertical-align()
+      font-family: "Minecraftia"
+
+
+@mixin playlist($large-width, $background-colour, $playlist-background, $playlist-title, $playlist-text)
   div#playlist-wrapper
     @include padding(40px 0 40px 0)
     @include margin(40px 20px 0 20px)
     background: $playlist-background
 
-
-
     div#playlist
+      @include track(50px, $background-colour)
       @include margin(0 auto 0 auto)
       width: $large-width
       background: $playlist-background
+      color: $playlist-text
 
       h2
+        color: $playlist-title
+        font-family: "Minecraftia"
         text-align: center
         margin-bottom: 20px
 
-@mixin music-base($large-screen, $medium-screen, $large-width, $medium-width, $music-background, $playlist-background)
+
+@mixin music-base($large-screen, $medium-screen, $large-width, $medium-width, $music-background, $playlist-background, $playlist-title, $playlist-text)
   div.music-page.sectionWrapper
     @include padding(70px 0 0 0)
     background-color: $music-background
@@ -49,4 +90,4 @@
       width: $large-width
 
       @include albums($large-width)
-      @include playlist($large-width/2, white, $playlist-background)
+      @include playlist($large-width/2, $music-background, $playlist-background, $playlist-title, $playlist-text)

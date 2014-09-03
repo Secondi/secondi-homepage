@@ -1,7 +1,8 @@
 (ns secondi.pages.music
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
-            [secondi.pages.generic :as generic]))
+            [secondi.pages.generic :as generic]
+            [clojure.string :as string]))
 
 ;; sound types
 ;; ----------------------------------------------------------------------------
@@ -72,13 +73,27 @@
 ;; track component
 ;; ----------------------------------------------------------------------------
 
+(def play-symbol "►")
+(def pause-symbol "||")
+
+(defn play-button [play-state]
+  (condp = play-state
+    :play pause-symbol
+    :pause play-symbol
+    :stop play-symbol))
+
 (defn track-view [track owner]
   (reify
+    om/IInitState
+    (init-state [_]
+                {:playing :stop})
     om/IRenderState
     (render-state [_ state]
                   (dom/div #js {:className "track"
                                 :onClick #(js/console.log (str "you've clicked: " (:name track)))}
-                           (dom/p nil (str "Track: "(:name track)))))))
+                           (dom/div #js {:className "play-button"}
+                                    (dom/span nil (play-button (:playing state))))
+                           (dom/span #js {:className "track-text"} (str "Track: " (:name track)))))))
 
 (defn playlist-view [playlist owner]
   (reify
@@ -86,7 +101,7 @@
     (render-state [_ state]
                   (dom/div #js {:id "playlist-wrapper"}
                            (dom/div #js {:id "playlist"}
-                                    (dom/h2 nil (:name playlist))
+                                    (dom/h2 nil (-> playlist :name string/upper-case))
                                     (apply dom/div nil
                                            (om/build-all track-view (:track-collection playlist))))))))
 
