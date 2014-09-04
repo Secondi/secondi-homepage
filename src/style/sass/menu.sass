@@ -8,7 +8,9 @@ $nav-square: #F15098
 @mixin menu-minimized
   div.minimized
     @include transition(height 0.3s linear)
+
     height: 40px
+
     div.wrapper
       padding-top: $nav-padding
       padding-bottom: $nav-padding
@@ -23,11 +25,13 @@ $nav-square: #F15098
     a:hover
       div.nav-square
         visibility: hidden
+
         > div.nav-name
           @include vertical-align()
+          @include transition(color 0.1s linear)
+
           visibility: visible
           top: -6px
-          @include transition(color 0.1s linear)
           color: $nav-font
 
 
@@ -71,12 +75,14 @@ $nav-square: #F15098
       > li
         @include fill-parent()
         @include span-columns(1 of 5)
+
         a
           display: block
           color: $nav-font
 
           div.nav-square
             @include transition(background-color 0.3s linear)
+
             position: relative
             margin: 0 auto
             width: 10px

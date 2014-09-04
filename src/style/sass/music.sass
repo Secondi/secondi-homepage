@@ -8,21 +8,25 @@
 @mixin playlist-corners($size, $background-color)
   div#corner-topleft
     @include playlist-corner($size, $background-color)
+
     top: 0
     left: 0
 
   div#corner-topright
     @include playlist-corner($size, $background-color)
+
     top: 0
     right: 0
 
   div#corner-bottomleft
     @include playlist-corner($size, $background-color)
+
     bottom: 0
     left: 0
 
   div#corner-bottomright
     @include playlist-corner($size, $background-color)
+
     bottom: 0
     right: 0
 
@@ -36,29 +40,28 @@
     width: $size
     height: $size
     bottom: -140px
-
     background-color: $colour
 
 
 @mixin albums($large-width, $pointer-colour)
   //Expecting 3 albums to be displayed in each row
   $album-count: 3
-  // 5px margin between each album.
+  // 10px margin between each album.
   $album-margin: 10px
   $album-size: ($large-width - (($album-count - 1) * $album-margin)) / $album-count
 
   div#albums
     @include clearfix()
-    //float: left
+
     padding-top: 70px
 
     div.album
       @include album-pointer($pointer-colour)
+
       position: relative
       float: left
       height: $album-size
       width: $album-size
-
       margin-right: $album-margin
 
       &:last-child
@@ -68,6 +71,7 @@
 @mixin track($size, $button-color)
   div.track
     @include clearfix()
+
     margin-bottom: 8px
     position: relative
 
@@ -89,6 +93,7 @@
 
       > span
         @include vertical-align()
+
         font-size: $size / 2
         width: $size
         text-align: center
@@ -98,6 +103,7 @@
 
     span.track-text
       @include vertical-align()
+
       font-family: "Minecraftia"
 
 
@@ -106,13 +112,14 @@
     @include playlist-corners(15px, $background-colour)
     @include padding(40px 0 40px 0)
     @include margin(40px 20px 40px 20px)
+
     background: $playlist-background
     position: relative
-
 
     div#playlist
       @include track(40px, $background-colour)
       @include margin(0 auto 0 auto)
+
       width: $large-width
       background: $playlist-background
       color: $playlist-text
@@ -127,11 +134,13 @@
 @mixin music-base($large-screen, $medium-screen, $large-width, $medium-width, $music-background, $playlist-background, $playlist-title, $playlist-text)
   div.music-page.sectionWrapper
     @include padding(60px 0 0 0)
+
     background-color: $music-background
     min-height: 100%
 
     > div.content
       @include clearfix()
+
       background-color: $music-background
       padding: 0
       width: $large-width
