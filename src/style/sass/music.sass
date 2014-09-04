@@ -36,6 +36,7 @@
   div#albums
     @include clearfix()
     //float: left
+    padding-top: 70px
 
     div.album
       float: left
@@ -88,12 +89,13 @@
   div#playlist-wrapper
     @include playlist-corners(15px, $background-colour)
     @include padding(40px 0 40px 0)
-    @include margin(40px 20px 0 20px)
+    @include margin(40px 20px 40px 20px)
     background: $playlist-background
     position: relative
 
+
     div#playlist
-      @include track(50px, $background-colour)
+      @include track(40px, $background-colour)
       @include margin(0 auto 0 auto)
       width: $large-width
       background: $playlist-background
@@ -108,8 +110,10 @@
 
 @mixin music-base($large-screen, $medium-screen, $large-width, $medium-width, $music-background, $playlist-background, $playlist-title, $playlist-text)
   div.music-page.sectionWrapper
-    @include padding(70px 0 0 0)
+    @include padding(60px 0 0 0)
     background-color: $music-background
+    min-height: 100%
+
     > div.content
       @include clearfix()
       background-color: $music-background

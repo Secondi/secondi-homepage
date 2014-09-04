@@ -137,7 +137,6 @@
                   (dom/div nil
                            (apply dom/div #js {:id "albums"}
                                   (om/build-all album-view albums))
-
                            (om/build playlist-view (:current-album state))))))
 
 ;; music page wrapper

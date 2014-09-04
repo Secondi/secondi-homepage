@@ -61,7 +61,8 @@
     om/IRenderState
     (render-state [this state]
                   (dom/div nil
-                           (om/build menu/menu-wrapper app)
+                           (om/build menu/menu-view app)
+                           (when (= :home (:view app)) (om/build menu/menu-wrapper app))
                            (let [view (:view app)]
                              (if (= :home view)
                                (apply dom/div nil
