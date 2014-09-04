@@ -51,5 +51,4 @@
 
 (defn menu-wrapper [app owner]
   (om/component
-   (dom/div #js {:className "menuOccupy"}
-            nil)))
+   (dom/div #js {:className "menuOccupy"} nil)))

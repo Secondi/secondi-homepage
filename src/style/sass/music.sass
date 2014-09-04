@@ -4,6 +4,7 @@
   width: $size
   height: $size
 
+
 @mixin playlist-corners($size, $background-color)
   div#corner-topleft
     @include playlist-corner($size, $background-color)
@@ -26,7 +27,20 @@
     right: 0
 
 
-@mixin albums($large-width)
+@mixin album-pointer($colour)
+  $size: 100px
+  div.album-pointer
+    @include center-absolute()
+    @include transform(rotate(45deg))
+
+    width: $size
+    height: $size
+    bottom: -140px
+
+    background-color: $colour
+
+
+@mixin albums($large-width, $pointer-colour)
   //Expecting 3 albums to be displayed in each row
   $album-count: 3
   // 5px margin between each album.
@@ -39,6 +53,8 @@
     padding-top: 70px
 
     div.album
+      @include album-pointer($pointer-colour)
+      position: relative
       float: left
       height: $album-size
       width: $album-size
@@ -120,5 +136,5 @@
       padding: 0
       width: $large-width
 
-      @include albums($large-width)
+      @include albums($large-width, $playlist-background)
       @include playlist($large-width/2, $music-background, $playlist-background, $playlist-title, $playlist-text)

@@ -28,12 +28,12 @@
 (defprotocol IPlaylist
   (play-next [this] [this next-track]))
 
-(defrecord Playlist [name album-cover track-collection]
+(defrecord Playlist [name album-cover track-collection active?]
   IPlaylist
   (play-next [this] nil))
 
 (defn playlist [name album-cover track-collection]
-  (->Playlist name album-cover track-collection))
+  (->Playlist name album-cover track-collection true))
 
 ;; page extension
 ;; ----------------------------------------------------------------------------
@@ -119,25 +119,32 @@
 (defn background-img [src]
   (str "url(" src ")"))
 
+(def album-pointer
+  (dom/div #js {:className "album-pointer"} nil))
+
 (defn album-view [album owner]
   (reify
     om/IRenderState
     (render-state [_ state]
                   (dom/div #js {:className "album"
                                 :onClick #(js/console.log (str "you have clicked: " (:name album)))
-                                :style #js {:background (background-img (:album-cover album))}}))))
+                                :style #js {:background (background-img (:album-cover album))}}
+                           (when (= true (:active? album)) album-pointer)))))
+
+(defn current-album [albums]
+  (first albums))
 
 (defn albumlist-view [albums owner]
   (reify
     om/IInitState
     (init-state [_]
-                {:current-album (first albums)})
+                {})
     om/IRenderState
     (render-state [_ state]
                   (dom/div nil
                            (apply dom/div #js {:id "albums"}
                                   (om/build-all album-view albums))
-                           (om/build playlist-view (:current-album state))))))
+                           (om/build playlist-view (current-album albums))))))
 
 ;; music page wrapper
 ;; ----------------------------------------------------------------------------
