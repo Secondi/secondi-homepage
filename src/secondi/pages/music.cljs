@@ -112,8 +112,8 @@
     (render-state [_ state]
                   (dom/div #js {:id "playlist-wrapper"}
                            playlist-corners
-                           (dom/div #js {:id "playlist"}
-                                    (when playlist
+                           (when playlist
+                             (dom/div #js {:id "playlist"}
                                       (dom/h2 nil (-> playlist :name string/upper-case))
                                       (apply dom/div nil
                                              (om/build-all track-view (:track-collection playlist)))))))))
@@ -146,9 +146,7 @@
 
 ;(fn [xs] (vec (remove #(= contact %) xs))))
 (defn select-album! [album owner]
-  (js/console.log (om/get-props owner))
-  ;(om/transact! owner (fn [xs] xs))
-  )
+  (om/set-state! owner :current-album (om/value album)))
 
 (defn albumlist-view [albums owner]
   (reify
