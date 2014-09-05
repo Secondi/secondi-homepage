@@ -6,6 +6,7 @@
             [cljs.core.async :refer [<! >! put! chan]])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
+
 ;; sound types
 ;; ----------------------------------------------------------------------------
 
@@ -37,18 +38,6 @@
 (defn playlist [name album-cover track-collection]
   (->Playlist name album-cover track-collection))
 
-;; page extension
-;; ----------------------------------------------------------------------------
-
-
-(defrecord MusicPage [navigation-page]
-  generic/IPageNavigation
-  (create-slug [this]
-               (generic/make-slug (get-in this [:navigation-page :page :name]))))
-
-(defn music-page [name body-description]
-  (->MusicPage (generic/navigate-page name body-description)))
-
 
 ;; primitive test data
 ;; ----------------------------------------------------------------------------
@@ -71,6 +60,19 @@
                                                                (music-track "i'm" 1)
                                                                (music-track "tummy" 1)
                                                                (music-track "laughter" 1)])])
+
+
+;; page extension
+;; ----------------------------------------------------------------------------
+
+(defrecord MusicPage [navigation-page]
+  generic/IPageNavigation
+  (create-slug [this]
+               (generic/make-slug (get-in this [:navigation-page :page :name]))))
+
+(defn music-page [name body-description]
+  (->MusicPage (generic/navigate-page name body-description)))
+
 
 ;; track component
 ;; ----------------------------------------------------------------------------
@@ -142,6 +144,7 @@
                            (when (= true (:active? state)) album-pointer)))))
 
 (defn current-album [albums]
+  (js/console.log albums)
   (first albums))
 
 ;(fn [xs] (vec (remove #(= contact %) xs))))
@@ -150,7 +153,7 @@
   ;(om/transact! owner (fn [xs] xs))
   )
 
-(defn albumlist-view [app-state owner]
+(defn albumlist-view [albums owner]
   (reify
     om/IInitState
     (init-state [_]
@@ -159,13 +162,14 @@
     (will-mount [_]
                 (let [ta-chan (om/get-state owner :ta-chan)]
                   (go (while true
-                           (select-album! (<! ta-chan) owner)))))
+                        (select-album! (<! ta-chan) owner)))))
     om/IRenderState
     (render-state [_ state]
                   (dom/div nil
                            (apply dom/div #js {:id "albums"}
-                                  (om/build-all album-view (:albums state) {:init-state {:ta-chan (:ta-chan state)}}))
-                           (om/build playlist-view (current-album (:albums state)))))))
+                                  (om/build-all album-view albums {:init-state {:ta-chan (:ta-chan state)}}))
+                           (om/build playlist-view (current-album albums))))))
+
 
 ;; music page wrapper
 ;; ----------------------------------------------------------------------------
@@ -178,9 +182,10 @@
      (reify
        om/IInitState
        (init-state [_]
-                   {:sections temp-playlists})
+                   {})
        om/IRenderState
        (render-state [_ state]
                      (dom/div #js {:className "sectionWrapper music-page"}
                               (dom/div #js {:className "content"}
-                                       (om/build albumlist-view app-state {:init-state {:albums (:sections state)}}))))))))
+                                       (om/build albumlist-view (get-in app-state [:app-state :music])))))))))
+
