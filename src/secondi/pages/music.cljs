@@ -113,10 +113,10 @@
                   (dom/div #js {:id "playlist-wrapper"}
                            playlist-corners
                            (dom/div #js {:id "playlist"}
-                                    (println playlist)
-                                    (dom/h2 nil (-> playlist :name string/upper-case))
-                                    (apply dom/div nil
-                                           (om/build-all track-view (:track-collection playlist))))))))
+                                    (when playlist
+                                      (dom/h2 nil (-> playlist :name string/upper-case))
+                                      (apply dom/div nil
+                                             (om/build-all track-view (:track-collection playlist)))))))))
 
 ;; album view component
 ;; ----------------------------------------------------------------------------
@@ -143,9 +143,6 @@
                                 :style #js {:background (background-img (:album-cover album))}}
                            (when (= true (:active? state)) album-pointer)))))
 
-(defn current-album [albums]
-  (js/console.log albums)
-  (first albums))
 
 ;(fn [xs] (vec (remove #(= contact %) xs))))
 (defn select-album! [album owner]
@@ -157,7 +154,8 @@
   (reify
     om/IInitState
     (init-state [_]
-                {:ta-chan (chan)})
+                {:ta-chan (chan)
+                 :current-album nil})
     om/IWillMount
     (will-mount [_]
                 (let [ta-chan (om/get-state owner :ta-chan)]
@@ -168,7 +166,7 @@
                   (dom/div nil
                            (apply dom/div #js {:id "albums"}
                                   (om/build-all album-view albums {:init-state {:ta-chan (:ta-chan state)}}))
-                           (om/build playlist-view (current-album albums))))))
+                           (om/build playlist-view (:current-album state))))))
 
 
 ;; music page wrapper
