@@ -127,26 +127,29 @@
 (def album-pointer
   (dom/div #js {:className "album-pointer"} nil))
 
-(defn set-active! [album state owner]
-  (put! (:ta-chan state) (om/value album))
-  (om/set-state! owner :active? true))
+(defn set-active! [album state]
+  (put! (:ta-chan state)  album))
+
+(defn is-active? [album state]
+  (= album (:current-album state)))
 
 (defn album-view [album owner]
   (reify
     om/IInitState
     (init-state [_]
-                {:active? false})
+                {})
     om/IRenderState
     (render-state [_ state]
                   (dom/div #js {:className "album"
-                                :onClick #(set-active! album state owner)
+                                :onClick #(set-active! album state)
                                 :style #js {:background (background-img (:album-cover album))}}
-                           (when (= true (:active? state)) album-pointer)))))
+                           (when (is-active? album state) album-pointer)
+                           ))))
 
 
 ;(fn [xs] (vec (remove #(= contact %) xs))))
 (defn select-album! [album owner]
-  (om/set-state! owner :current-album (om/value album)))
+  (om/set-state! owner :current-album album))
 
 (defn albumlist-view [albums owner]
   (reify
@@ -163,7 +166,8 @@
     (render-state [_ state]
                   (dom/div nil
                            (apply dom/div #js {:id "albums"}
-                                  (om/build-all album-view albums {:init-state {:ta-chan (:ta-chan state)}}))
+                                  (om/build-all album-view albums {:init-state {:ta-chan (:ta-chan state)}
+                                                                   :state {:current-album (:current-album state)}}))
                            (om/build playlist-view (:current-album state))))))
 
 
