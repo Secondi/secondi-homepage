@@ -15,7 +15,6 @@
 
 (enable-console-print!)
 
-
 ;; application state
 ;; ----------------------------------------------------------------------------
 
@@ -27,6 +26,7 @@
                                   (generic/navigate-page "Rainbow" "you like rainbows?")
                                   (generic/generic-page "Sign Up" "you should sign up to the mailing list")]
                           :music :loading}))
+
 
 ;; root om component
 ;; ----------------------------------------------------------------------------

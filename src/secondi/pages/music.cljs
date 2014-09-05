@@ -2,7 +2,9 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [secondi.pages.generic :as generic]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [cljs.core.async :refer [<! >! put! chan]])
+  (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
 
 ;; sound types
 ;; ----------------------------------------------------------------------------
@@ -28,12 +30,12 @@
 (defprotocol IPlaylist
   (play-next [this] [this next-track]))
 
-(defrecord Playlist [name album-cover track-collection active?]
+(defrecord Playlist [name album-cover track-collection]
   IPlaylist
   (play-next [this] nil))
 
 (defn playlist [name album-cover track-collection]
-  (->Playlist name album-cover track-collection true))
+  (->Playlist name album-cover track-collection))
 
 ;; page extension
 ;; ----------------------------------------------------------------------------
@@ -109,6 +111,7 @@
                   (dom/div #js {:id "playlist-wrapper"}
                            playlist-corners
                            (dom/div #js {:id "playlist"}
+                                    (println playlist)
                                     (dom/h2 nil (-> playlist :name string/upper-case))
                                     (apply dom/div nil
                                            (om/build-all track-view (:track-collection playlist))))))))
@@ -122,29 +125,47 @@
 (def album-pointer
   (dom/div #js {:className "album-pointer"} nil))
 
+(defn set-active! [album state owner]
+  (put! (:ta-chan state) (om/value album))
+  (om/set-state! owner :active? true))
+
 (defn album-view [album owner]
   (reify
+    om/IInitState
+    (init-state [_]
+                {:active? false})
     om/IRenderState
     (render-state [_ state]
                   (dom/div #js {:className "album"
-                                :onClick #(js/console.log (str "you have clicked: " (:name album)))
+                                :onClick #(set-active! album state owner)
                                 :style #js {:background (background-img (:album-cover album))}}
-                           (when (= true (:active? album)) album-pointer)))))
+                           (when (= true (:active? state)) album-pointer)))))
 
 (defn current-album [albums]
   (first albums))
 
-(defn albumlist-view [albums owner]
+;(fn [xs] (vec (remove #(= contact %) xs))))
+(defn select-album! [album owner]
+  (js/console.log (om/get-props owner))
+  ;(om/transact! owner (fn [xs] xs))
+  )
+
+(defn albumlist-view [app-state owner]
   (reify
     om/IInitState
     (init-state [_]
-                {})
+                {:ta-chan (chan)})
+    om/IWillMount
+    (will-mount [_]
+                (let [ta-chan (om/get-state owner :ta-chan)]
+                  (go (while true
+                           (select-album! (<! ta-chan) owner)))))
     om/IRenderState
     (render-state [_ state]
                   (dom/div nil
                            (apply dom/div #js {:id "albums"}
-                                  (om/build-all album-view albums))
-                           (om/build playlist-view (current-album albums))))))
+                                  (om/build-all album-view (:albums state) {:init-state {:ta-chan (:ta-chan state)}}))
+                           (om/build playlist-view (current-album (:albums state)))))))
 
 ;; music page wrapper
 ;; ----------------------------------------------------------------------------
@@ -162,4 +183,4 @@
        (render-state [_ state]
                      (dom/div #js {:className "sectionWrapper music-page"}
                               (dom/div #js {:className "content"}
-                                       (om/build albumlist-view (:sections state)))))))))
+                                       (om/build albumlist-view app-state {:init-state {:albums (:sections state)}}))))))))
