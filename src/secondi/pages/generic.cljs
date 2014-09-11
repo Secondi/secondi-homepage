@@ -50,9 +50,19 @@
 ;; om component
 ;; ----------------------------------------------------------------------------
 
-(def transition-in "pt-page-current")
-(def transition-mid "pt-page-ontop pt-page-current")
+(def transition-in "pt-page-current pt-page-ontop")
+(def transition-mid "pt-page-current")
 (def transition-out "")
+(def trans-effect :scaleDownBottom)
+
+(defn get-transition-el [transition]
+  (get-in transition [:transition]))
+
+(defn get-page-name [page]
+  (get-in page [:page :name]))
+
+(defn same-page? [page1 page2]
+  (= (get-page-name page1) (get-page-name page2)))
 
 ;; generic page view
 (defn page-view [page owner]
@@ -62,44 +72,39 @@
                 {})
     om/IWillUpdate
     (will-update [this next-props next-state]
-                (when (not= (get-in next-props [:page :name]) (get-in page [:page :name]))
+                (when (not (same-page? next-props page))
                   (om/set-state! owner :prev-page page)))
     om/IDidUpdate
     (did-update [this prev-props prev-state]
-                (when (not= (get-in prev-props [:page :name]) (get-in page [:page :name]))
+                (when (not (same-page? prev-props page))
                   (let [pages (gdom/getChildren (om/get-node owner))
-                        new-page (aget pages 0)
-                        old-page (aget pages 1)
-                        trans-new (transition/transition-in new-page :rotateRoomLeft)
-                        trans-old (transition/transition-out old-page :rotateRoomLeft)
-                        el-new (get-in trans-new [:transition])
-                        el-old (get-in trans-old [:transition])]
-                    (listen el-new :transition-play #(om/set-state! owner :transition transition-in))
-                    (listen el-old :transition-end #(om/set-state! owner :prev-page nil))
-                    (transition/play trans-new)
-                    (transition/play trans-old))))
+                        {:keys [in out]} (transition/create-transitions [(aget pages 0) (aget pages 1)] trans-effect)
+                        el-in (get-transition-el in)
+                        el-out (get-transition-el out)]
+                    (listen el-in :transition-play #(om/set-state! owner :transition transition-in))
+                    (listen el-out :transition-end #(om/set-state! owner :prev-page nil))
+                    (transition/play in)
+                    (transition/play out))))
     om/IDidMount
     (did-mount [_]
-               (let [trans (transition/transition-in (aget (gdom/getChildren (om/get-node owner)) 0) :rotateRoomLeft)
+               (let [trans (transition/create-transition (aget (gdom/getChildren (om/get-node owner)) 0) trans-effect :in)
                      el (get-in trans [:transition])]
                  (listen el :transition-play #(om/set-state! owner :transition transition-in))
                  (transition/play trans)))
     om/IWillUnmount
     (will-unmount [_]
-               (let [trans (transition/transition-out (om/get-node owner) :rotateRoomLeft)
+               (let [trans (transition/create-transition (om/get-node owner) trans-effect :out)
                      el (get-in trans [:transition])
                      c (listen el :transition-end #(om/set-state! owner :transition transition-out))]
-                 (go (let [v (<! c)]
-                         (js/console.log "end")))
                  (listen el :transition-play #(om/set-state! owner :transition transition-mid))
                  (transition/play trans)))
 
     om/IRenderState
     (render-state [this state]
                   (dom/div nil
-                           (dom/div #js {:className (str "sectionWrapper general-page pt-page " (:transition state)) :id (get-in page [:page :name])}
+                           (dom/div #js {:className (str "sectionWrapper general-page pt-page " (:transition state)) :id (get-page-name page)}
                                     (dom/div #js {:className "content"} (get-in page [:page :body-description] "boo")))
                            (when (:prev-page state)
                              (let [prev-page (:prev-page state)]
-                               (dom/div #js {:className "sectionWrapper general-page pt-page pt-page-ontop pt-page-current" :id (get-in prev-page [:page :name])}
+                               (dom/div #js {:className "sectionWrapper general-page pt-page pt-page-current" :id (get-page-name prev-page)}
                                         (dom/div #js {:className "content"} (get-in prev-page [:page :body-description] "boo")))))))))
