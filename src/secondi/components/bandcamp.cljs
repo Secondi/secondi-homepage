@@ -35,6 +35,8 @@
 
 ;; sound types
 ;; ----------------------------------------------------------------------------
+
+
 (def secondi-id "1269523251")
 (def dev-key "vatnajokull")
 (def api-url "http://api.bandcamp.com/api/")
@@ -45,11 +47,11 @@
 
 (defn url-query [v]
   (string/join "&" (map (fn [item]
-                             (url-kv (-> item (get 0) name)
-                                     (item 1)))(seq v))))
+                          (url-kv (-> item (get 0) name)
+                                  (item 1)))(seq v))))
 
 (defn discography [api-key band-id]
   (str band-url "?" (url-query {:key api-key
-                                        :band_id band-id})))
+                                :band_id band-id})))
 
 (discography dev-key secondi-id)
