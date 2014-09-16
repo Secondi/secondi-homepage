@@ -1,5 +1,6 @@
 (ns secondi.components.bandcamp
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string])
+  (:import [goog.net Jsonp]))
 
 
 ;; sound types
@@ -40,7 +41,7 @@
 (def secondi-id "1269523251")
 (def dev-key "vatnajokull")
 (def api-url "http://api.bandcamp.com/api/")
-(def band-url (str api-url "band/3/"))
+(def band-url (str api-url "band/"))
 
 (defn url-kv [k v]
   (str k "=" v))
@@ -51,7 +52,10 @@
                                   (item 1)))(seq v))))
 
 (defn discography [api-key band-id]
-  (str band-url "?" (url-query {:key api-key
+  (str band-url "3/discography?" (url-query {:key api-key
                                 :band_id band-id})))
 
-(discography dev-key secondi-id)
+(defn handler [response]
+  (js/console.log response))
+
+(.send (goog.net.Jsonp. (discography dev-key secondi-id)) nil handler)
