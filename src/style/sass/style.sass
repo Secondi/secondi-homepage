@@ -15,14 +15,18 @@ $playlist-text: #FFF
 $aboutus-background: #F15098
 $mailinglist-background: #A2D5E9
 
-@import 'fonts'
-
 body
   margin: 0
   background-color: #313533
 
+
+@import 'fonts'
+@include font-face("Minecraftia")
+
+
 @import 'pages'
 @include general-page()
+
 
 @import 'menu'
 @include menu-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background)
@@ -30,10 +34,10 @@ body
 @include menu-full()
 
 
-
 @import 'music'
 @include music-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background)
 @include albums($large-width, $playlist-background)
 @include playlist($large-width/2, $nav-background, $playlist-background, $playlist-title, $playlist-text)
+
 
 @import 'transitions'

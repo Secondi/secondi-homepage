@@ -1,3 +1,4 @@
-@font-face
-  font-family: "Minecraftia"
-  src: url('../fonts/Minecraftia.ttf') format('truetype')
+@mixin font-face($font-name)
+  @font-face
+    font-family: $font-name
+    src: url('../fonts/'+$font-name+'.ttf') format('truetype')
