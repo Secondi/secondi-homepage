@@ -67,12 +67,12 @@
                            (let [view (:view app)]
                              (if (= :home view)
                                (apply dom/div nil
+                                      (println "lets render all areas")
                                       (om/build-all generic/page-view (:areas app)))
                                (render-page view (:areas app) app)))))))
 
 (om/root secondi-app app-state
          {:target (. js/document (getElementById "page"))})
-
 
 ;; routing
 ;; ----------------------------------------------------------------------------

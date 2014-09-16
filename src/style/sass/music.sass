@@ -131,7 +131,7 @@
         margin-bottom: 20px
 
 
-@mixin music-base($large-screen, $medium-screen, $large-width, $medium-width, $music-background, $playlist-background, $playlist-title, $playlist-text)
+@mixin music-base($large-screen, $medium-screen, $large-width, $medium-width, $music-background)
   div.music-page.sectionWrapper
     @include padding(60px 0 0 0)
 
@@ -144,6 +144,3 @@
       background-color: $music-background
       padding: 0
       width: $large-width
-
-      @include albums($large-width, $playlist-background)
-      @include playlist($large-width/2, $music-background, $playlist-background, $playlist-title, $playlist-text)
