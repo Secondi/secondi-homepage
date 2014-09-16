@@ -2,41 +2,10 @@
   (:require [om.core :as om :include-macros true]
             [om.dom :as dom :include-macros true]
             [secondi.pages.generic :as generic]
+            [secondi.components.bandcamp :refer [music-track playlist]]
             [clojure.string :as string]
             [cljs.core.async :refer [<! >! put! chan]])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
-
-
-;; sound types
-;; ----------------------------------------------------------------------------
-
-(defprotocol ITrack
-  (prepare-track [this])
-  (play-track [this])
-  (stop-track [this])
-  (current-position [this])
-  (set-position [this]))
-
-(defrecord SoundcloudTrack [name soundmanager]
-  ITrack
-  (prepare-track [this] nil)
-  (play-track [this] nil)
-  (stop-track [this] nil)
-  (current-position [this] nil)
-  (set-position [this] nil))
-
-(defn music-track [name _]
-  (->SoundcloudTrack name nil))
-
-(defprotocol IPlaylist
-  (play-next [this] [this next-track]))
-
-(defrecord Playlist [name album-cover track-collection]
-  IPlaylist
-  (play-next [this] nil))
-
-(defn playlist [name album-cover track-collection]
-  (->Playlist name album-cover track-collection))
 
 
 ;; primitive test data
