@@ -23,9 +23,9 @@
    (dom/li nil
            (dom/a #js {:className "link" :href (generic/create-slug (.-value item))}
                   (->> item
-                      (nav-name)
-                      (menu-square)
-                      (dom/div #js {:className "wrapper"}))))))
+                       (nav-name)
+                       (menu-square)
+                       (dom/div #js {:className "wrapper"}))))))
 
 (defn nav-items [areas]
   (filter #(satisfies? generic/IPageNavigation (.-value %)) areas))
@@ -33,7 +33,7 @@
 
 (defn menu-class [state]
   (clj->js (merge {:className (string/join " " ["menuWrapper"
-                                   (if (> 300 (:scrollY state)) "full" "minimized")])})))
+                                                (if (> 300 (:scrollY state)) "full" "minimized")])})))
 
 (defn menu-view [app owner]
   (reify
@@ -51,5 +51,4 @@
 
 (defn menu-wrapper [app owner]
   (om/component
-   (dom/div #js {:className "menuOccupy"}
-            (om/build menu-view app))))
+   (dom/div #js {:className "menuOccupy"} nil)))

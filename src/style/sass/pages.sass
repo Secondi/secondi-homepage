@@ -2,8 +2,9 @@
 
 @mixin general-page()
   div.sectionWrapper
-    width: 100%
     @include padding(140px 0 140px 0)
+
+    width: 100%
 
     &:nth-child(2n)
       background-color: #CCC
@@ -13,6 +14,7 @@
 
     div.content
       @include center-absolute()
+
       position: relative
       width: 500px
       padding: 5px

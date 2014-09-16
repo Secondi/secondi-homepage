@@ -4,13 +4,18 @@
 
 $large-screen: em(1080)
 $medium-screen: em(940)
-$large-width: em(800)
+$large-width: 800px
 $medium-width: em(640)
 
 $nav-background: #313533
 $header-background: #181919
+$playlist-background: #202021
+$playlist-title: #B2B5B4
+$playlist-text: #FFF
 $aboutus-background: #F15098
 $mailinglist-background: #A2D5E9
+
+@import 'fonts'
 
 body
   margin: 0
@@ -24,4 +29,7 @@ body
 @include menu-minimized()
 @include menu-full()
 
+
 @import 'transitions'
+@import 'music'
+@include music-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background, $playlist-background, $playlist-title, $playlist-text)

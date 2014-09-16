@@ -15,7 +15,6 @@
 
 (enable-console-print!)
 
-
 ;; application state
 ;; ----------------------------------------------------------------------------
 
@@ -26,7 +25,8 @@
                                   (generic/navigate-page "Blog" "blog with me")
                                   (generic/navigate-page "Rainbow" "you like rainbows?")
                                   (generic/generic-page "Sign Up" "you should sign up to the mailing list")]
-                          :music :loading}))
+                          :music music/temp-playlists}))
+
 
 ;; root om component
 ;; ----------------------------------------------------------------------------
@@ -50,23 +50,25 @@
   "
   decide and render either a general or custom page
   "
-  [view-state areas]
+  [view-state areas app-state]
   (let [current-page (get-navigationpage view-state areas)]
     (om/build (if (satisfies? generic/ICustomPage current-page)
                 (generic/custom-page current-page)
-                generic/page-view) current-page)))
+                generic/page-view) {:specific current-page
+                                    :app-state app-state})))
 
 (defn secondi-app [app owner]
   (reify
     om/IRenderState
     (render-state [this state]
                   (dom/div #js {:className "pt-perspective"}
-                           (om/build menu/menu-wrapper app)
+                           (om/build menu/menu-view app)
+                           (when (= :home (:view app)) (om/build menu/menu-wrapper app))
                            (let [view (:view app)]
                              (if (= :home view)
                                (apply dom/div nil
                                       (om/build-all generic/page-view (:areas app)))
-                               (render-page view (:areas app))))))))
+                               (render-page view (:areas app) app)))))))
 
 (om/root secondi-app app-state
          {:target (. js/document (getElementById "page"))})
