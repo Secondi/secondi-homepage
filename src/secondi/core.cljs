@@ -3,10 +3,12 @@
             [om.dom :as dom :include-macros true]
             [secondi.pages.generic :as generic]
             [secondi.pages.music :as music]
+            [secondi.pages.video :as video]
+            [secondi.vimeo :as vimeo]
             [secondi.menu :as menu]
             [secondi.dom :refer [get-anchor has-class by-id]]
             [secondi.reactive :refer [listen]]
-            [cljs.core.async :refer [<! >! put! chan alts!]]
+            [cljs.core.async :refer [<! >! put! chan]]
             [secretary.core :as secretary :include-macros true :refer [defroute]])
   (:import [goog.history Html5History]
            [goog Uri]
@@ -15,18 +17,19 @@
 
 (enable-console-print!)
 
-
 ;; application state
 ;; ----------------------------------------------------------------------------
 
 (defonce app-state (atom {:view :home
                           :areas [(generic/navigate-page "About" "hello this is about us")
                                   (music/music-page "Music" "I like music, we like music, you like too?")
-                                  (generic/navigate-page "Video" "A whole lot of video")
+                                  (video/video-page "Video" "A whole lot of video")
                                   (generic/navigate-page "Blog" "blog with me")
                                   (generic/navigate-page "Rainbow" "you like rainbows?")
                                   (generic/generic-page "Sign Up" "you should sign up to the mailing list")]
-                          :music :loading}))
+                          :music music/temp-playlists
+                          :video video/temp-playlists}))
+
 
 ;; root om component
 ;; ----------------------------------------------------------------------------
@@ -50,23 +53,25 @@
   "
   decide and render either a general or custom page
   "
-  [view-state areas]
+  [view-state areas app-state]
   (let [current-page (get-navigationpage view-state areas)]
     (om/build (if (satisfies? generic/ICustomPage current-page)
                 (generic/custom-page current-page)
-                generic/page-view) current-page)))
+                generic/page-view) {:specific current-page
+                                    :app-state app-state})))
 
 (defn secondi-app [app owner]
   (reify
     om/IRenderState
     (render-state [this state]
-                  (dom/div #js {:className "pt-perspective"}
-                           (om/build menu/menu-wrapper app)
+                  (dom/div nil
+                           (om/build menu/menu-view app)
+                           (when (= :home (:view app)) (om/build menu/menu-wrapper app))
                            (let [view (:view app)]
                              (if (= :home view)
                                (apply dom/div nil
                                       (om/build-all generic/page-view (:areas app)))
-                               (render-page view (:areas app))))))))
+                               (render-page view (:areas app) app)))))))
 
 (om/root secondi-app app-state
          {:target (. js/document (getElementById "page"))})
