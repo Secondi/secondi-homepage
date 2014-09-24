@@ -28,7 +28,8 @@
                                   (generic/navigate-page "Rainbow" "you like rainbows?")
                                   (generic/generic-page "Sign Up" "you should sign up to the mailing list")]
                           :music music/temp-playlists
-                          :video video/temp-playlists}))
+                          :video video/temp-playlists
+                          :current-video (first (:film-collection video/temp-playlists))}))
 
 
 ;; root om component

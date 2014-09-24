@@ -42,11 +42,22 @@
 ;; primitive test data
 ;; ----------------------------------------------------------------------------
 
-(def temp-playlists (playlist "Secondi Vimeo" [(vimeo-film "Secondi - Red Release" "/video/82328663" "https://i.vimeocdn.com/video/458707406_200x150.jpg" 1)
-                                               (vimeo-film "Secondi - Sometimes the destination is unknown (Promo #3)" "/video/82049870" "https://i.vimeocdn.com/video/458306576_200x150.jpg" 1)
-                                               (vimeo-film "i'm" "/video/82328663" "https://i.vimeocdn.com/video/458707406_200x150.jpg" 1)
-                                               (vimeo-film "dummy" "/video/82328663" "https://i.vimeocdn.com/video/458707406_200x150.jpg" 1)
-                                               (vimeo-film "data" "/video/82328663" "https://i.vimeocdn.com/video/458707406_200x150.jpg" 1)]))
+(def temp-playlists (playlist "Secondi Vimeo" [(vimeo-film "Secondi - Red Release"
+                                                           "/video/82328663"
+                                                           "https://i.vimeocdn.com/video/458707406_200x150.jpg"
+                                                           1)
+                                               (vimeo-film "Secondi - Sometimes the destination is unknown (Promo #3)"
+                                                           "/video/82049870"
+                                                           "https://i.vimeocdn.com/video/458306576_200x150.jpg"
+                                                           1)
+                                               (vimeo-film "Secondi - We're okay at doing mystery events"
+                                                           "/video/81691718"
+                                                           "https://i.vimeocdn.com/video/457855696_200x150.jpg"
+                                                           1)
+                                               (vimeo-film "Secondi - Something reasonably fantastical is on its way (promo)"
+                                                           "/video/81344880"
+                                                           "https://i.vimeocdn.com/video/457459751_200x150.jpg"
+                                                           1)]))
 
 ;; page extension
 ;; ----------------------------------------------------------------------------
@@ -59,48 +70,6 @@
 (defn video-page [name body-description]
   (->VideoPage (generic/navigate-page name body-description)))
 
-;; playlist view component
-
-(def playlist-corners
-  (dom/div nil
-           (dom/div #js {:id "corner-topleft"} nil)
-           (dom/div #js {:id "corner-topright"} nil)
-           (dom/div #js {:id "corner-bottomleft"} nil)
-           (dom/div #js {:id "corner-bottomright"} nil)))
-
-(def play-symbol "►")
-(def pause-symbol "||")
-
-(defn play-button [play-state]
-  (condp = play-state
-    :play pause-symbol
-    :pause play-symbol
-    :stop play-symbol))
-
-(defn track-view [track owner]
-  (reify
-    om/IInitState
-    (init-state [_]
-                {:playing :stop})
-    om/IRenderState
-    (render-state [_ state]
-                  (dom/div #js {:className "track"
-                                :onClick #(js/console.log (str "you've clicked: " (:name track)))}
-                           (dom/div #js {:className "play-button"}
-                                    (dom/span nil (play-button (:playing state))))
-                           (dom/span #js {:className "track-text"} (str "Track: " (:name track)))))))
-
-(defn playlist-view [playlist owner]
-  (reify
-    om/IRenderState
-    (render-state [_ state]
-                  (dom/div #js {:id "playlist-wrapper"}
-                           playlist-corners
-                           (when playlist
-                             (dom/div #js {:id "playlist"}
-                                      (dom/h2 nil (-> playlist :name string/upper-case))
-                                      (apply dom/div nil
-                                             (om/build-all track-view (:track-collection playlist)))))))))
 
 ;; player view component
 ;; ----------------------------------------------------------------------------
@@ -115,14 +84,9 @@
                   (dom/div nil
                            (when-not (nil? video)
                              (dom/iframe #js {:src (stream-url video)
-                                              :width "600"
-                                              :height "480"
-                                              :frameborder 0
-                                              :webkitallowfullscreen true
-                                              :mozallowfullscreen true
-                                              :allowfullscreen true}))))))
-; <iframe src="//player.vimeo.com/video/VIDEO_ID"
-;  width="WIDTH" height="HEIGHT" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                              :width "892"
+                                              :height "502"
+                                              :frameBorder 0}))))))
 
 ;; video view component
 ;; ----------------------------------------------------------------------------
@@ -141,7 +105,7 @@
     om/IRenderState
     (render-state [_ state]
                   (dom/div #js {:className "video"
-                                :onClick #(set-active! (.-value video) state)}
+                                :onClick #(set-active! video state)}
                            (dom/img #js {:src (:thumbnail video)})))))
 
 
@@ -152,8 +116,7 @@
   (reify
     om/IInitState
     (init-state [_]
-                {:video-chan (chan)
-                 :current-video nil})
+                {:video-chan (chan)})
     om/IWillMount
     (will-mount [_]
                 (let [video-chan (om/get-state owner :video-chan)]
@@ -162,12 +125,12 @@
     om/IRenderState
     (render-state [_ state]
                   (dom/div nil
-                           (om/build player-view (:current-video state))
+                           (om/build player-view (.-value (:current-video state)))
                            (dom/hr nil)
                            (apply dom/div #js {:id "video-list"}
                                   (om/build-all video-view (:film-collection video-list)
                                                 {:init-state {:video-chan (:video-chan state)}
-                                                  :state {:current-video (:current-video state)}}))))))
+                                                 :state {:current-video (.-value (:current-video state))}}))))))
 
 ;; video page wrapper
 ;; ----------------------------------------------------------------------------
@@ -185,5 +148,6 @@
        (render-state [_ state]
                      (dom/div #js {:className "sectionWrapper video-page"}
                               (dom/div #js {:className "content"}
-                                       (om/build videolist-view (get-in app-state [:app-state :video])))))))))
+                                       (om/build videolist-view (get-in app-state [:app-state :video])
+                                                 {:state {:current-video (get-in app-state [:app-state :current-video])}}))))))))
 
