@@ -3,10 +3,12 @@
             [om.dom :as dom :include-macros true]
             [secondi.pages.generic :as generic]
             [secondi.pages.music :as music]
+            [secondi.pages.video :as video]
+            [secondi.vimeo :as vimeo]
             [secondi.menu :as menu]
             [secondi.dom :refer [get-anchor has-class by-id]]
             [secondi.reactive :refer [listen]]
-            [cljs.core.async :refer [<! >! put! chan alts!]]
+            [cljs.core.async :refer [<! >! put! chan]]
             [secretary.core :as secretary :include-macros true :refer [defroute]])
   (:import [goog.history Html5History]
            [goog Uri]
@@ -21,12 +23,13 @@
 (defonce app-state (atom {:view :home
                           :areas [(generic/navigate-page "About" "hello this is about us")
                                   (music/music-page "Music" "I like music, we like music, you like too?")
-                                  (generic/navigate-page "Video" "A whole lot of video")
+                                  (video/video-page "Video" "A whole lot of video")
                                   (generic/navigate-page "Blog" "blog with me")
                                   (generic/navigate-page "Rainbow" "you like rainbows?")
                                   (generic/generic-page "Sign Up" "you should sign up to the mailing list")]
-                          :music music/temp-playlists}))
-
+                          :music music/temp-playlists
+                          :video video/temp-playlists
+                          :current-video (first (:film-collection video/temp-playlists))}))
 
 ;; root om component
 ;; ----------------------------------------------------------------------------

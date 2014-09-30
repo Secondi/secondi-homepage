@@ -33,12 +33,14 @@ body
 @include menu-minimized()
 @include menu-full()
 
-
 @import 'music'
 @include music-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background)
 @include albums($large-width, $playlist-background)
 @include playlist($large-width/2, $nav-background, $playlist-background, $playlist-title, $playlist-text)
 
+@import 'video'
+@include video-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background)
+@include video-playlist($large-width, $nav-background, $playlist-background, $playlist-title, $playlist-text, $playlist-background)
 
 @import 'transitions'
 @include transition-base()

@@ -1,0 +1,61 @@
+
+@mixin video-pointer($colour)
+  $size: 100px
+  div.album-pointer
+    @include center-absolute()
+    @include transform(rotate(45deg))
+
+    width: $size
+    height: $size
+    bottom: -140px
+    background-color: $colour
+
+@mixin videos($large-width, $pointer-colour)
+  //Expecting 3 videos to be visible
+  $video-count: 3
+  // 10px margin between each album.
+  $video-margin: 0px
+  $video-size: ($large-width - (($video-count - 1) * $video-margin)) / $video-count
+
+  div.video
+    @include video-pointer($pointer-colour)
+    display: inline
+    width: $video-size
+    margin-right: $video-margin
+
+    img
+      width: $video-size
+      height: auto
+
+    &:last-child
+      background:green
+
+@mixin video-playlist($large-width, $background-colour, $playlist-background, $playlist-title, $playlist-text, $pointer-colour)
+  div#video-playlist-wrapper
+
+    position: relative
+    overflow: hidden
+    width: $large-width
+
+    div#playlist
+      @include videos($large-width, $pointer-colour)
+      @include clearfix()
+
+      width: 100%
+      display: block
+
+@mixin video-base($large-screen, $medium-screen, $large-width, $medium-width, $video-background)
+  div.video-page.sectionWrapper
+    @include padding(60px 0 0 0)
+
+    background-color: $video-background
+    min-height: 100%
+
+    > div.content
+      @include clearfix()
+
+      background-color: $video-background
+      padding: 0
+      margin-top: 40px
+      margin-bottom: 40px
+      width: $large-width
