@@ -40,7 +40,8 @@ body
 @include playlist($large-width/2, $nav-background, $playlist-background, $playlist-title, $playlist-text)
 
 @import 'video'
-@include music-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background)
+@include video-base($large-screen, $medium-screen, $large-width, $medium-width, $nav-background)
+@include video-playlist($large-width, $nav-background, $playlist-background, $playlist-title, $playlist-text, $playlist-background)
 
 @import 'transitions'
 @include transition-base()

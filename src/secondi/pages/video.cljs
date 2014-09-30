@@ -44,19 +44,19 @@
 
 (def temp-playlists (playlist "Secondi Vimeo" [(vimeo-film "Secondi - Red Release"
                                                            "/video/82328663"
-                                                           "https://i.vimeocdn.com/video/458707406_200x150.jpg"
+                                                           "https://i.vimeocdn.com/video/458707406_295x166.jpg"
                                                            1)
                                                (vimeo-film "Secondi - Sometimes the destination is unknown (Promo #3)"
                                                            "/video/82049870"
-                                                           "https://i.vimeocdn.com/video/458306576_200x150.jpg"
+                                                           "https://i.vimeocdn.com/video/458306576_295x166.jpg"
                                                            1)
                                                (vimeo-film "Secondi - We're okay at doing mystery events"
                                                            "/video/81691718"
-                                                           "https://i.vimeocdn.com/video/457855696_200x150.jpg"
+                                                           "https://i.vimeocdn.com/video/457855696_295x166.jpg"
                                                            1)
                                                (vimeo-film "Secondi - Something reasonably fantastical is on its way (promo)"
                                                            "/video/81344880"
-                                                           "https://i.vimeocdn.com/video/457459751_200x150.jpg"
+                                                           "https://i.vimeocdn.com/video/457459751_295x166.jpg"
                                                            1)]))
 
 ;; page extension
@@ -84,8 +84,8 @@
                   (dom/div nil
                            (when-not (nil? video)
                              (dom/iframe #js {:src (stream-url video)
-                                              :width "892"
-                                              :height "502"
+                                              :width "800"
+                                              :height "533"
                                               :frameBorder 0}))))))
 
 ;; video view component
@@ -105,35 +105,27 @@
     om/IRenderState
     (render-state [_ state]
                   (dom/div #js {:className "video"
-                                :onClick #(set-active! video state)}
+                                :onClick #(set-active! (.-value video)  state)}
                            (dom/img #js {:src (:thumbnail video)})))))
 
-
-(defn select-video! [video owner]
-  (om/set-state! owner :current-video video))
-
-(defn videolist-view [video-list owner]
+(defn playlist-view [video-list owner]
   (reify
     om/IInitState
     (init-state [_]
-                {:video-chan (chan)})
-    om/IWillMount
-    (will-mount [_]
-                (let [video-chan (om/get-state owner :video-chan)]
-                  (go (while true
-                        (select-video! (<! video-chan) owner)))))
+                {})
     om/IRenderState
     (render-state [_ state]
-                  (dom/div nil
-                           (om/build player-view (.-value (:current-video state)))
-                           (dom/hr nil)
-                           (apply dom/div #js {:id "video-list"}
+                  (dom/div #js {:id "video-playlist-wrapper"}
+                           (apply dom/div #js {:id "playlist"}
                                   (om/build-all video-view (:film-collection video-list)
-                                                {:init-state {:video-chan (:video-chan state)}
-                                                 :state {:current-video (.-value (:current-video state))}}))))))
+                                                {:init-state {:video-chan (:video-chan state)
+                                                              :current-video (:current-video state)}}))))))
 
 ;; video page wrapper
 ;; ----------------------------------------------------------------------------
+
+(defn select-video! [video owner]
+  (om/set-state! owner :current-video video))
 
 (extend-type VideoPage
   generic/ICustomPage
@@ -143,11 +135,21 @@
      (reify
        om/IInitState
        (init-state [_]
-                   {})
+                   {:video-chan (chan)
+                    :current-video (.-value (get-in app-state [:app-state :current-video]))})
+       om/IWillMount
+       (will-mount [_]
+                   (let [video-chan (om/get-state owner :video-chan)]
+                     (go (while true
+                           (select-video! (<! video-chan) owner)))))
        om/IRenderState
        (render-state [_ state]
-                     (dom/div #js {:className "sectionWrapper video-page"}
-                              (dom/div #js {:className "content"}
-                                       (om/build videolist-view (get-in app-state [:app-state :video])
-                                                 {:state {:current-video (get-in app-state [:app-state :current-video])}}))))))))
+                     (let [current-video (:current-video state)]
+                       (dom/div #js {:className "sectionWrapper video-page"}
+                                (dom/div #js {:className "content"}
+                                         (om/build player-view current-video)
+                                         (dom/hr nil)
+                                         (om/build playlist-view (get-in app-state [:app-state :video])
+                                                   {:init-state {:video-chan (:video-chan state)
+                                                                 :current-video current-video}})))))))))
 
