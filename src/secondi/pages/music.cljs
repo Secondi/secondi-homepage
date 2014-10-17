@@ -15,20 +15,26 @@
 (def img-2 "http://www.anticatrattoriabellaria.it/upload/thumb500/1301264205.jpg")
 (def img-3 "http://3.bp.blogspot.com/-IXpItzpZr3w/T6dyViU3DkI/AAAAAAAAGHA/_r9xVqMkMPM/s1600/IMG_1686.JPG")
 
-(def temp-playlists [(playlist "this is" img-1 [(music-track "hello" 1)
-                                                (music-track "there" 1)
-                                                (music-track "i'm" 1)
-                                                (music-track "dummy" 1)
-                                                (music-track "data" 1)])
-                     (playlist "secondi food" img-2 [(music-track "watch me" 1)
-                                                     (music-track "play" 1)
-                                                     (music-track "i'll" 1)
-                                                     (music-track "choose" 1)
-                                                     (music-track "anti-mage" 1)])
-                     (playlist "from italy, apparently" img-3 [(music-track "care" 1)
-                                                               (music-track "i'm" 1)
-                                                               (music-track "tummy" 1)
-                                                               (music-track "laughter" 1)])])
+(def temp-playlists [(playlist {:name "this is"
+                                :album-cover img-1
+                                :track-collection [(music-track "hello" 1)
+                                                   (music-track "there" 1)
+                                                   (music-track "i'm" 1)
+                                                   (music-track "dummy" 1)
+                                                   (music-track "data" 1)]})
+                     (playlist {:name "secondi food"
+                                :album-cover img-2
+                                :track-collection [(music-track "watch me" 1)
+                                                   (music-track "play" 1)
+                                                   (music-track "i'll" 1)
+                                                   (music-track "choose" 1)
+                                                   (music-track "anti-mage" 1)]})
+                     (playlist {:name "from italy, apparently"
+                                :album-cover img-3
+                                :track-collection [(music-track "care" 1)
+                                                   (music-track "i'm" 1)
+                                                   (music-track "tummy" 1)
+                                                   (music-track "laughter" 1)]})])
 
 
 ;; page extension
